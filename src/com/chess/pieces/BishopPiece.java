@@ -65,16 +65,18 @@ public class BishopPiece extends Piece {
         return true;
     }
 
-    public List<Integer[]> validDestinationSet() throws Exception {
+    protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 
-        for(int n = 1; n < 8; n++) {
+
+        for (int n = 1; n < 8; n++) {
             addMoveIfValid(validMoves, loc_x + n, loc_y + n);
             addMoveIfValid(validMoves, loc_x + n, loc_y - n);
             addMoveIfValid(validMoves, loc_x - n, loc_y + n);
             addMoveIfValid(validMoves, loc_x - n, loc_y - n);
         }
+
 
         return validMoves;
 

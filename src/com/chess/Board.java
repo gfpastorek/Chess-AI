@@ -121,7 +121,7 @@ public class Board {
         addPiece(new RookPiece(this, player), 0, first_row);
         addPiece(new ChuckNorrisPiece(this, player), 1, first_row);
         addPiece(new BishopPiece(this, player), 2, first_row);
-        addPiece(getPlayerKing(player), 3, first_row);
+        addPiece(new KingPiece(this, player), 3, first_row);
         addPiece(new KillerQueenPiece(this, player), 4, first_row);
         addPiece(new BishopPiece(this, player), 5, first_row);
         addPiece(new ChuckNorrisPiece(this, player), 6, first_row);
@@ -154,8 +154,6 @@ public class Board {
         if(piece == null){
             return 1;
         }
-
-        /* check if
 
         /* check if the piece can move to the destination */
         if(!piece.isValidMove(src_x, src_y, dest_x, dest_y)) {
@@ -282,6 +280,11 @@ public class Board {
         /* get the dummy version of 'piece' */
         int src_x = piece.getLocX();
         int src_y = piece.getLocY();
+
+        if(copyBoard.getPiece(src_x, src_y) == null){
+            System.out.println("copyPiece == null");
+        }
+
         Piece copyPiece = copyBoard.getPiece(src_x, src_y);
 
         /* temporarily open up the space we are moving from */
@@ -292,6 +295,9 @@ public class Board {
             copyBoard.spaces[dest_x][dest_y] = copyPiece;
             copyPiece.setLocation(dest_x, dest_y);
         }
+
+        /* copy the board before we remove the king, for deeper recursions */
+        //Board nextBoard = new Board(copyBoard);
 
         /* get appropriate king piece and its coordinates */
         int king_x, king_y;
@@ -304,13 +310,14 @@ public class Board {
             king_y = kingPiece.getLocY();
         }
 
-        /* temporarily remove king so we can check if a piece can move there */
+        /* temporarily replace king with a dummy pawn so we can check if a piece can move there */
         copyBoard.spaces[king_x][king_y] = null;
+        copyBoard.addPiece(new PawnPiece(copyBoard, piece.getPlayer()), king_x, king_y);
 
         /* get opponent pieces */
         ArrayList<Piece> opponentPieces = (copyPiece.getPlayer() == 1) ? copyBoard.player2Pieces : copyBoard.player1Pieces;
 
-        /* capture copyPiece so that further recursons of 'causesCheck' ignore it */
+        /* capture copyPiece so that further recursions of 'causesCheck' ignore it */
         copyPiece.setCaptured(true);
 
         /* check if each opponent piece could attack king */
@@ -318,17 +325,27 @@ public class Board {
 
             /* this piece would have been captured, skip check */
             if(oppPiece.getLocX() == dest_x && oppPiece.getLocY() == dest_y){
-                break;
+                continue;
             }
 
             /* piece is captured, skip */
             if(oppPiece.isCaptured()){
-                break;
+                continue;
             }
+
+            Board nextBoard = new Board(copyBoard);
+
+            if(nextBoard.getPlayerKing(1) == null) {
+                nextBoard.player1King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
+            }
+            if(nextBoard.getPlayerKing(2) == null) {
+                nextBoard.player1King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
+            }
+
 
             /* a valid move will satisfy "isValidMove" and will not cause a check */
             if (oppPiece.isValidMove(oppPiece.getLocX(), oppPiece.getLocY(), king_x, king_y)
-                    && !causesCheck(oppPiece, king_x, king_y, copyBoard)){
+                    && !causesCheck(oppPiece, king_x, king_y, nextBoard)){
                 return true;
             }
 

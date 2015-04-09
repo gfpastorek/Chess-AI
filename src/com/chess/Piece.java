@@ -1,6 +1,7 @@
 package com.chess;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,15 @@ public abstract class Piece {
 
     public abstract boolean isValidMove(int src_x, int src_y, int dest_x, int dest_y);
 
-    public abstract List<Integer[]> validDestinationSet() throws Exception;
+    protected abstract List<Integer[]> retrieveValidDestinationSet() throws Exception;
+
+    public List<Integer[]> validDestinationSet() throws Exception {
+        if(!captured) {
+            return retrieveValidDestinationSet();
+        } else {
+            return new ArrayList<Integer[]>();
+        }
+    }
 
     /* return int 1 or 2, corresponding to controlling player */
     public int getPlayer(){
@@ -89,7 +98,7 @@ public abstract class Piece {
     /* add a move n spaces in dir_x and dir_y to the validMoves set */
     protected void addMoveIfValid(List<Integer[]> validMoves, int dst_x, int dst_y) throws Exception {
         if(isValidMove(loc_x, loc_y, dst_x, dst_y)
-                && board.causesCheck(this, dst_x, dst_y)) {
+                && !board.causesCheck(this, dst_x, dst_y)) {
             validMoves.add(new Integer[]{loc_x, loc_y, dst_x, dst_y});
         }
     }

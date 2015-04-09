@@ -55,7 +55,10 @@ public class Main {
                     while(game.isRunning()){
                         try {
                             Thread.sleep(200);
-                        } catch(InterruptedException e) {}
+                            game.pollAI();
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     game.newGame();

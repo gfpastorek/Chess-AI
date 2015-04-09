@@ -56,7 +56,7 @@ public class ChuckNorrisPiece extends Piece {
     }
 
 
-    public List<Integer[]> validDestinationSet() throws Exception {
+    protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 

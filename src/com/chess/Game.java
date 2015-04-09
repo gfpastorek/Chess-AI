@@ -18,12 +18,14 @@ public class Game {
     GUI gui;
     Board board;
     boolean running;
+    boolean aiLock;
 
     /* game state variables */
     int player1Score;
     int player2Score;
     String playerName[] = new String[2];
-    Boolean playerIsAI[] = new Boolean[2];
+    boolean playerIsAI[] = new boolean[2];
+    ChessAI[] aiPlayers = new ChessAI[2];
     int player_turn = 1;
     int highlighted_x, highlighted_y;
     boolean space_selected;
@@ -31,7 +33,7 @@ public class Game {
     Board previousBoard = null;
 
     public Game() {
-        playerIsAI[1] = true;
+
     }
 
     public void setGUI(GUI gui_){
@@ -94,7 +96,7 @@ public class Game {
         gui.setStartButtonText("Start");
     }
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return running;
     }
 
@@ -169,11 +171,17 @@ public class Game {
 
                 gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
 
+                //TODO - refactor segment below into it's own method
+                playerIsAI[1] = true;
+                aiPlayers[1] = new ChessAI(0, board.player2Pieces);
+
             }
             catch (InvalidArgumentException e1)
             {
                 e1.printStackTrace();
                 throw new RuntimeException();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
     }
@@ -306,8 +314,55 @@ public class Game {
             }
         }
 
+
+
+
+
+    }
+
+    public void pollAI() throws Exception {
+        if(playerIsAI[player_turn-1] && !aiLock){
+            aiLock = true;
+            makeAiMove(player_turn);
+            aiLock = false;
+        }
     }
 
 
+    private void makeAiMove(int player) throws Exception {
+
+        /* check for correct turn */
+        if(player_turn != player) {
+            throw new InvalidArgumentException(new String[] { "Wrong player turn." });
+        }
+
+        /* verify that the player is an AI player */
+        if(!playerIsAI[player-1]) {
+            throw new InvalidArgumentException(new String[] {"Player is not an AI player."});
+        }
+
+        /* retrieve the AI system */
+        ChessAI ai = aiPlayers[player-1];
+
+        if(ai == null){
+            throw new IllegalStateException("Missing AI system.");
+        }
+
+        /* unlight any spaces that may be have been highlighted by user */
+        if(space_selected) {
+            gui.unhighlightSpace(highlighted_x, highlighted_y);
+            space_selected = false;
+        }
+
+        /* returns move as [src_x, src_y, dst_x, dst_y] */
+        Integer[] move = ai.getMove();
+
+        /* make the move by activating the GUI */
+        //TODO - lock GUI?
+        gui.clickSpace(move[0], move[1]);
+        Thread.sleep(500);
+        gui.clickSpace(move[2], move[3]);
+
+    }
 
 }

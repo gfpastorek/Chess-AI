@@ -12,12 +12,10 @@ import java.util.List;
  */
 public class ChessAI {
 
-    private int player;
     private ArrayList<Piece> pieces;
     private int difficulty;
 
-    public ChessAI(int difficulty_, int player_, ArrayList<Piece> pieces_) {
-        player = player_;
+    public ChessAI(int difficulty_, ArrayList<Piece> pieces_) {
         pieces = pieces_;
         difficulty = difficulty_;
     }

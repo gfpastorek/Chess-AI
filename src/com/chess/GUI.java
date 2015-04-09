@@ -318,4 +318,9 @@ public class GUI {
         }
     }
 
+    /* programmatically click space [x,y], used for AI */
+    public void clickSpace(int x, int y) {
+        chessBoardSpaces[x][y].doClick();
+    }
+
 }

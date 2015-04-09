@@ -16,16 +16,16 @@ public class ChessAITest extends TestCase {
     public void testMovePiece_isValidMove() throws Exception {
 
         Board testBoard =  new Board(8, 8);
-        Piece whiteKing = new KingPiece(testBoard,0);
-        Piece blackKing = new KingPiece(testBoard,1);
-        Piece blackQueen = new QueenPiece(testBoard, 1);
+        Piece whiteKing = new KingPiece(testBoard,1);
+        Piece blackKing = new KingPiece(testBoard,2);
+        Piece blackQueen = new QueenPiece(testBoard, 2);
         testBoard.addPiece(whiteKing, 4, 4);
         testBoard.addPiece(blackQueen, 7, 5);
         testBoard.addPiece(blackKing, 7, 7);
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
         ai_pieces.add(whiteKing);
-        ChessAI ai = new ChessAI(0, 0, ai_pieces);
+        ChessAI ai = new ChessAI(0, ai_pieces);
 
         Integer[] move = ai.getMove();
 

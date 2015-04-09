@@ -95,7 +95,7 @@ public class KillerQueenPiece extends Piece {
         return true;
     }
 
-    public List<Integer[]> validDestinationSet() throws Exception {
+    protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 

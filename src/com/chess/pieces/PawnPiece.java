@@ -38,8 +38,9 @@ public class PawnPiece extends Piece {
             return false;
         }
 
-        /* pawn can only move two spaces on first move and it is not a capture */
-        if(Math.abs(dir_y) == 2 && (hasMoved || Math.abs(dir_x) > 0)){
+        /* pawn can only move two spaces on first move, no blockage, and it is not a capture */
+        if(Math.abs(dir_y) == 2 &&
+                (hasMoved || Math.abs(dir_x) > 0 || board.getPiece(dest_x, (int)(dest_y - Math.signum(dir_y))) != null)){
             return false;
         }
 
@@ -78,18 +79,17 @@ public class PawnPiece extends Piece {
     }
 
 
-    public List<Integer[]> validDestinationSet() throws Exception {
+    protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 
-        int dir = 1 - 2*player;
+        /* maps 2->-1 and 1->1 */
+        int dir = 3 - 2*player;
 
         addMoveIfValid(validMoves, loc_x + 1, loc_y + dir);
         addMoveIfValid(validMoves, loc_x - 1, loc_y + dir);
         addMoveIfValid(validMoves, loc_x,     loc_y + dir);
-        addMoveIfValid(validMoves, loc_x,     loc_y - dir);
         addMoveIfValid(validMoves, loc_x,     loc_y + 2*dir);
-        addMoveIfValid(validMoves, loc_x,     loc_y - 2*dir);
 
         return validMoves;
 
