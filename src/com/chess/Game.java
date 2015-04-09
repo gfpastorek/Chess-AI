@@ -23,6 +23,7 @@ public class Game {
     int player1Score;
     int player2Score;
     String playerName[] = new String[2];
+    Boolean playerIsAI[] = new Boolean[2];
     int player_turn = 1;
     int highlighted_x, highlighted_y;
     boolean space_selected;
@@ -30,7 +31,7 @@ public class Game {
     Board previousBoard = null;
 
     public Game() {
-
+        playerIsAI[1] = true;
     }
 
     public void setGUI(GUI gui_){
