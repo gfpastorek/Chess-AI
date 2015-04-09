@@ -177,19 +177,14 @@ public class BoardTest {
     @Test
     public void testCausesCheck() throws Exception {
         Board testBoard = new Board(8, 8);
-        testBoard = spy(testBoard);
-        Piece piece = spy(new KingPiece(testBoard, 1));
-        Piece piece2 = spy(new KingPiece(testBoard, 2));
-        piece.setLocation(3, 3);
-        when(testBoard.getPlayerKing(1)).thenReturn(piece);
-        when(testBoard.getPlayerKing(2)).thenReturn(piece2);
+        //testBoard = spy(testBoard);
+        Piece kpiece = new KingPiece(testBoard, 1);
+        Piece kpiece2 = new KingPiece(testBoard, 2);
         Piece queenPiece = new QueenPiece(testBoard, 1);
-        testBoard.addPiece(piece, 3, 3);
-        testBoard.addPiece(piece2, 0, 1);
+        testBoard.addPiece(kpiece, 3, 3);
+        testBoard.addPiece(kpiece2, 0, 1);
         testBoard.addPiece(queenPiece, 4, 4);
-        queenPiece.setLocation(4, 4);
         Piece oppQueenPiece = new QueenPiece(testBoard, 2);
-        oppQueenPiece.setLocation(5, 5);
         testBoard.addPiece(oppQueenPiece, 5, 5);
         assertEquals("Causes check", true, testBoard.causesCheck(queenPiece, 4, 6, testBoard));
         assertEquals("Does not cause check", false, testBoard.causesCheck(queenPiece, 5, 5, testBoard));

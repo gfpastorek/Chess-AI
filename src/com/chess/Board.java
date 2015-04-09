@@ -339,7 +339,7 @@ public class Board {
                 nextBoard.player1King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
             }
             if(nextBoard.getPlayerKing(2) == null) {
-                nextBoard.player1King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
+                nextBoard.player2King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
             }
 
 

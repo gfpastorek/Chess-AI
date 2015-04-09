@@ -33,13 +33,15 @@ public class ChessAI {
 
     }
 
-    /* random return a valid move for the AI */
+    /* random return a valid move for the AI             */
+    /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
     private Integer[] getRandomMove() throws Exception {
 
         /*  copy pieces list, shuffle order of pieces for random selection */
         ArrayList<Piece> potentialPieces = (ArrayList<Piece>) pieces.clone();
         Collections.shuffle(potentialPieces);
 
+        /* select a random (valid) move from a random piece */
         while(!potentialPieces.isEmpty()) {
             Piece piece = potentialPieces.remove(0);
             List<Integer[]> moveSet = piece.validDestinationSet();
@@ -49,6 +51,7 @@ public class ChessAI {
             }
         }
 
+        /* exception, checkmate should have occured */
         throw new IllegalStateException("No valid moves for AI player.");
 
     }

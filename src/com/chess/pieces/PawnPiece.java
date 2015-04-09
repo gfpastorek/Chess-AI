@@ -79,6 +79,7 @@ public class PawnPiece extends Piece {
     }
 
 
+    /* retrieve the set of all valid moves for this piece as a tuple of [src_x, src_y, dst_x, dst_y] */
     protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();

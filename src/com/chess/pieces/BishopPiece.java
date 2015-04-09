@@ -65,10 +65,10 @@ public class BishopPiece extends Piece {
         return true;
     }
 
+    /* retrieve the set of all valid moves for this piece as a tuple of [src_x, src_y, dst_x, dst_y] */
     protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
-
 
         for (int n = 1; n < 8; n++) {
             addMoveIfValid(validMoves, loc_x + n, loc_y + n);
@@ -77,9 +77,7 @@ public class BishopPiece extends Piece {
             addMoveIfValid(validMoves, loc_x - n, loc_y - n);
         }
 
-
         return validMoves;
-
     }
 
 

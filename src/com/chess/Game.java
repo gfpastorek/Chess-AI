@@ -172,6 +172,9 @@ public class Game {
                 gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
 
                 //TODO - refactor segment below into it's own method
+                playerIsAI[0] = true;
+                aiPlayers[0] = new ChessAI(0, board.player1Pieces);
+
                 playerIsAI[1] = true;
                 aiPlayers[1] = new ChessAI(0, board.player2Pieces);
 
@@ -314,12 +317,9 @@ public class Game {
             }
         }
 
-
-
-
-
     }
 
+    /* AI polling mechanism, if the current player is an AI player, make an AI move */
     public void pollAI() throws Exception {
         if(playerIsAI[player_turn-1] && !aiLock){
             aiLock = true;
@@ -329,6 +329,7 @@ public class Game {
     }
 
 
+    /* make a move using the AI system for player 'player' */
     private void makeAiMove(int player) throws Exception {
 
         /* check for correct turn */
@@ -360,7 +361,7 @@ public class Game {
         /* make the move by activating the GUI */
         //TODO - lock GUI?
         gui.clickSpace(move[0], move[1]);
-        Thread.sleep(500);
+        //Thread.sleep(500);
         gui.clickSpace(move[2], move[3]);
 
     }
