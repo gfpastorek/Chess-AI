@@ -22,8 +22,9 @@ public class ChessAI {
         difficulty = difficulty_;
     }
 
+    /* make an AI move, execution depends on the difficulty setting */
+    /* returns a list of 4 numbers, src_x, src_y, dst_x, dst_y      */
     public Integer[] getMove() throws Exception {
-
 
         switch(difficulty) {
             case 0:
@@ -34,6 +35,7 @@ public class ChessAI {
 
     }
 
+    /* random return a valid move for the AI */
     private Integer[] getRandomMove() throws Exception {
 
         /*  copy pieces list, shuffle order of pieces for random selection */
