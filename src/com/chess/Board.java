@@ -465,4 +465,21 @@ public class Board {
         return false;
     }
 
+    /* returns true if one of the opponents pieces can attack the piece 'piece' */
+    public boolean canBeAttacked(Piece piece) throws Exception {
+        int loc_x = piece.getLocX();
+        int loc_y = piece.getLocY();
+
+        List<Piece> oppPieces = getPieces(piece.getPlayer() ^ 3);
+
+        for(Piece oppPiece : oppPieces) {
+            if(oppPiece.isValidMove(loc_x, loc_y) && !causesCheck(oppPiece, loc_x, loc_y)){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
 }

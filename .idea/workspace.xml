@@ -2,22 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="428e4b7a-7267-4c1d-aa69-6fadcc82c81c" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Yuriy\IdeaProjects\Chess-AI\out\production\Chess-AI\com\chess\GUI.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Yuriy\IdeaProjects\Chess-AI\out\production\Chess-AI\com\chess\Game$ForfeitClickListener.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Yuriy\IdeaProjects\Chess-AI\out\production\Chess-AI\com\chess\Game$StartClickListener.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Yuriy\IdeaProjects\Chess-AI\out\production\Chess-AI\com\chess\Game$UndoClickListener.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Yuriy\IdeaProjects\Chess-AI\src\com\chess\GUI.java" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/PieceRank.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/chess/PieceRank.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Board.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Board.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game$SpaceClickListener.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game$SpaceClickListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main$1.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Chess-AI.iml" afterPath="$PROJECT_DIR$/Chess-AI.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/ChessAI.java" afterPath="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Game.java" afterPath="$PROJECT_DIR$/src/com/chess/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Main.java" afterPath="$PROJECT_DIR$/src/com/chess/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/tests/ChessAITest.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/tests/ChessAITest.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Piece.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Piece.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Board.java" afterPath="$PROJECT_DIR$/src/com/chess/Board.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tests/ChessAITest.java" afterPath="$PROJECT_DIR$/src/tests/ChessAITest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Piece.java" afterPath="$PROJECT_DIR$/src/com/chess/Piece.java" />
     </list>
     <ignored path="Chess-AI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,11 +45,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChessAITest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ChessAITest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tests/ChessAITest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="979" max-vertical-offset="1428">
-              <caret line="74" column="58" selection-start-line="74" selection-start-column="58" selection-end-line="74" selection-end-column="58" />
+            <state vertical-scroll-proportion="-0.63919824" vertical-offset="746" max-vertical-offset="1428">
+              <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -74,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Board.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/chess/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.56" vertical-offset="1428" max-vertical-offset="7922">
-              <caret line="98" column="56" selection-start-line="98" selection-start-column="56" selection-end-line="98" selection-end-column="56" />
+            <state vertical-scroll-proportion="-8.206897" vertical-offset="1717" max-vertical-offset="8211">
+              <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -89,8 +82,8 @@
       <file leaf-file-name="Piece.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/chess/Piece.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="1683">
-              <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1751">
+              <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -99,10 +92,11 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/chess/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.551724" vertical-offset="5365" max-vertical-offset="6035">
-              <caret line="345" column="26" selection-start-line="345" selection-start-column="12" selection-end-line="345" selection-end-column="26" />
+            <state vertical-scroll-proportion="-12.551724" vertical-offset="5535" max-vertical-offset="6171">
+              <caret line="347" column="13" selection-start-line="347" selection-start-column="13" selection-end-line="347" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#582#591#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -171,7 +165,6 @@
         <option value="$PROJECT_DIR$/src/com/chess/pieces/PawnPiece.java" />
         <option value="$PROJECT_DIR$/src/com/chess/pieces/BishopPiece.java" />
         <option value="$PROJECT_DIR$/src/com/chess/pieces/RookPiece.java" />
-        <option value="$PROJECT_DIR$/src/tests/ChessAITest.java" />
         <option value="$PROJECT_DIR$/src/tests/BoardTest.java" />
         <option value="$PROJECT_DIR$/src/com/chess/pieces/QueenPiece.java" />
         <option value="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
@@ -180,6 +173,7 @@
         <option value="$PROJECT_DIR$/src/com/chess/Game.java" />
         <option value="$PROJECT_DIR$/src/ChessGUI/ChessGUI.java" />
         <option value="$PROJECT_DIR$/src/com/chess/Board.java" />
+        <option value="$PROJECT_DIR$/src/tests/ChessAITest.java" />
       </list>
     </option>
   </component>
@@ -630,23 +624,30 @@
       <option name="number" value="Default" />
       <updated>1428553328102</updated>
     </task>
+    <task id="LOCAL-00001" summary="new gui">
+      <created>1428641651650</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1428641651650</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1548" height="842" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32816902" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32816902" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32112676" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32957748" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32112676" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -703,6 +704,9 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="new gui" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;out/production/Chess-AI/com/chess/ChessAI.class&#10;&#9;out/production/Chess-AI/com/chess/Game$StartClickListener.class&#10;&#9;src/com/chess/Game.java&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;out/production/Chess-AI/com/chess/ChessAI.class&#10;&#9;out/production/Chess-AI/com/chess/Game$StartClickListener.class&#10;&#9;src/com/chess/Game.java&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -721,7 +725,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/chess/Game.java</url>
-          <line>70</line>
+          <line>71</line>
           <properties />
           <option name="timeStamp" value="99" />
         </line-breakpoint>
@@ -788,18 +792,18 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="164" max-vertical-offset="1700">
           <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding>
-            <element signature="e#1211#1212#0" expanded="false" />
-            <element signature="e#1240#1241#0" expanded="false" />
-            <element signature="e#1321#1322#0" expanded="false" />
-            <element signature="e#1352#1353#0" expanded="false" />
-            <element signature="e#1435#1436#0" expanded="false" />
-            <element signature="e#1467#1468#0" expanded="false" />
-            <element signature="e#1540#1541#0" expanded="false" />
-            <element signature="e#1572#1573#0" expanded="false" />
-            <element signature="e#1783#1784#0" expanded="false" />
-            <element signature="e#1811#1812#0" expanded="false" />
-            <element signature="e#1838#1839#0" expanded="false" />
-            <element signature="e#1866#1867#0" expanded="false" />
+            <element signature="e#1333#1334#0" expanded="false" />
+            <element signature="e#1362#1363#0" expanded="false" />
+            <element signature="e#1443#1444#0" expanded="false" />
+            <element signature="e#1474#1475#0" expanded="false" />
+            <element signature="e#1557#1558#0" expanded="false" />
+            <element signature="e#1589#1590#0" expanded="false" />
+            <element signature="e#1662#1663#0" expanded="false" />
+            <element signature="e#1694#1695#0" expanded="false" />
+            <element signature="e#1905#1906#0" expanded="false" />
+            <element signature="e#1933#1934#0" expanded="false" />
+            <element signature="e#1960#1961#0" expanded="false" />
+            <element signature="e#1988#1989#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -824,6 +828,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#582#591#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -958,16 +963,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tests/ChessAITest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1428">
-          <caret line="74" column="58" selection-start-line="74" selection-start-column="58" selection-end-line="74" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tests/BoardTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4012">
@@ -978,8 +973,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/chess/Piece.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="1683">
-          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1751">
+          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1016,8 +1011,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/chess/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.551724" vertical-offset="5365" max-vertical-offset="6035">
-          <caret line="345" column="26" selection-start-line="345" selection-start-column="12" selection-end-line="345" selection-end-column="26" />
+        <state vertical-scroll-proportion="-12.551724" vertical-offset="5535" max-vertical-offset="6171">
+          <caret line="347" column="13" selection-start-line="347" selection-start-column="13" selection-end-line="347" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#582#591#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/chess/Board.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.206897" vertical-offset="1717" max-vertical-offset="8211">
+          <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1042,10 +1048,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/chess/Board.java">
+    <entry file="file://$PROJECT_DIR$/src/tests/ChessAITest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56" vertical-offset="1428" max-vertical-offset="7922">
-          <caret line="98" column="56" selection-start-line="98" selection-start-column="56" selection-end-line="98" selection-end-column="56" />
+        <state vertical-scroll-proportion="-0.63919824" vertical-offset="746" max-vertical-offset="1428">
+          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
