@@ -1,8 +1,8 @@
 package com.chess;
 
-import com.chess.GUI;
 import com.chess.Game;
 import com.chess.pieces.*;
+import ChessGUI.*;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import javax.swing.*;
@@ -13,10 +13,23 @@ public class Main {
     public static void main(String[] args) throws IOException, InvalidArgumentException {
 
         final Game game = new Game();
-        final GUI gui = new GUI(8, 8, game);
-        game.setGUI(gui);
+        final ChessGUI curGui= new ChessGUI();
+        curGui.setModel(game);
+        game.setGUI(curGui);
+        /*game.running=true;
+        game.board = new Board(8,8);
+        game.board.resetBoard(true);
+        game.playerIsAI[0] = true;
+        game.aiPlayers[0] = new ChessAI(0, game.board.player1Pieces);
+        game.playerIsAI[1] = false;
+        curGui.updatePieces(game.board);
+        */
+        curGui.launchGUI();
+        game.offset= curGui.getOffset();
+        game.spacing= curGui.getSpacing();
 
-        JFrame frame = new JFrame("Chess");
+
+        /*JFrame frame = new JFrame("Chess");
         frame.add(gui.getGui());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationByPlatform(true);
@@ -31,11 +44,10 @@ public class Main {
 
         game.setFrame(frame);
 
-        /* prompt user for player names */
-        String player1Name = JOptionPane.showInputDialog(frame, "Enter player 1's name.");
-        String player2Name = JOptionPane.showInputDialog(frame, "Enter player 2's name.");
-        game.setPlayerNames(player1Name, player2Name);
-
+        /* prompt user for player names*/
+        String Player_one_name= curGui.getPlayerName(1);
+        String Player_two_name= curGui.getPlayerName(2);
+        game.setPlayerNames(Player_one_name, Player_two_name);
         Runnable r = new Runnable() {
 
             @Override
@@ -53,15 +65,24 @@ public class Main {
 
                     /* game is started, loop here */
                     while(game.isRunning()){
-                        try {
-                            Thread.sleep(10);
-                            game.pollAI();
-                        } catch(Exception e) {
-                            e.printStackTrace();
+                        boolean gameOver=false;
+                        try{
+                            gameOver= game.checkIfGameOver();
+                        }
+                        catch (Exception e){
+
+                        }
+                        if (!gameOver) {
+                            try {
+                                Thread.sleep(10);
+                                game.makeMove();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 
-                    game.newGame();
+                    //game.newGame();
                 }
 
             }

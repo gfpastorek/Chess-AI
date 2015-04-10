@@ -66,10 +66,7 @@ public class ChessAI {
                 return moveSet.remove(0);
             }
         }
-
-        /* exception, checkmate or stalemate should have occured */
-        throw new IllegalStateException("No valid moves for AI player.");
-
+        return null;
     }
 
     /* rank moves from best to worst, look-ahead factor is 1 */
