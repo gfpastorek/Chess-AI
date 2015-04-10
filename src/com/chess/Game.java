@@ -173,10 +173,10 @@ public class Game {
 
                 //TODO - refactor segment below into it's own method
                 playerIsAI[0] = true;
-                aiPlayers[0] = new ChessAI(0, board.player1Pieces);
+                aiPlayers[0] = new ChessAI(0, board, board.player1Pieces);
 
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(0, board.player2Pieces);
+                aiPlayers[1] = new ChessAI(0, board, board.player2Pieces);
 
             }
             catch (InvalidArgumentException e1)

@@ -32,6 +32,10 @@ public abstract class Piece {
         board = parent;
     }
 
+    public boolean isValidMove(int dest_x, int dest_y) {
+        return isValidMove(loc_x, loc_y, dest_x, dest_y);
+    }
+
     public abstract boolean isValidMove(int src_x, int src_y, int dest_x, int dest_y);
 
     protected abstract List<Integer[]> retrieveValidDestinationSet() throws Exception;
