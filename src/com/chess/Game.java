@@ -113,7 +113,7 @@ public class Game {
         switch(type) {
             case 1:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(0, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
                 playerIsAI[1]=false;
                 break;
             case 2:
@@ -122,9 +122,9 @@ public class Game {
                 break;
             case 3:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(0, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(0, board.player2Pieces);
+                aiPlayers[1] = new ChessAI(0, board, board.player2Pieces);
                 break;
         }
     }
