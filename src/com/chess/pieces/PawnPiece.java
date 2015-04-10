@@ -45,7 +45,7 @@ public class PawnPiece extends Piece {
         }
 
         /* players can only move away from start in y direction */
-        if(player == 1 && dir_y < 0 || player == 2 && dir_y > 0){
+        if(player == 1 && dir_y < 1 || player == 2 && dir_y > 1){
             return false;
         }
 
