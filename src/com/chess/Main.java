@@ -16,33 +16,10 @@ public class Main {
         final ChessGUI curGui= new ChessGUI();
         curGui.setModel(game);
         game.setGUI(curGui);
-        /*game.running=true;
-        game.board = new Board(8,8);
-        game.board.resetBoard(true);
-        game.playerIsAI[0] = true;
-        game.aiPlayers[0] = new ChessAI(0, game.board.player1Pieces);
-        game.playerIsAI[1] = false;
-        curGui.updatePieces(game.board);
-        */
+
         curGui.launchGUI();
         game.offset= curGui.getOffset();
         game.spacing= curGui.getSpacing();
-
-
-        /*JFrame frame = new JFrame("Chess");
-        frame.add(gui.getGui());
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLocationByPlatform(true);
-
-        // ensures the frame is the minimum size it needs to be
-        // in order display the components within it
-        frame.pack();
-
-        // ensures the minimum size is enforced.
-        frame.setMinimumSize(frame.getSize());
-        frame.setVisible(true);
-
-        game.setFrame(frame);
 
         /* prompt user for player names*/
         String Player_one_name= curGui.getPlayerName(1);
@@ -82,7 +59,6 @@ public class Main {
                         }
                     }
 
-                    //game.newGame();
                 }
 
             }
