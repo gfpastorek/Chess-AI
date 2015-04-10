@@ -54,7 +54,7 @@ public class Main {
                     /* game is started, loop here */
                     while(game.isRunning()){
                         try {
-                            //Thread.sleep(200);
+                            Thread.sleep(10);
                             game.pollAI();
                         } catch(Exception e) {
                             e.printStackTrace();

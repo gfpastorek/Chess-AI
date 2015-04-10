@@ -19,6 +19,10 @@ public class QueenPiece extends Piece {
         super(other, parent);
     }
 
+    public QueenPiece(PawnPiece other, Board parent){
+        super(other, parent);
+    }
+
     /* checks if a move is valid, DOES NOT check if check is caused */
     public boolean isValidMove(int src_x, int src_y, int dest_x, int dest_y){
 

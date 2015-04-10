@@ -5,6 +5,7 @@ import com.chess.pieces.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -179,7 +180,33 @@ public class Board {
         /* set hasMoved flag since this piece has moved at least once */
         piece.setHasMoved(true);
 
+        /* check for promotion */
+        if(piece.getClass() == PawnPiece.class && (dest_y == 7 || dest_y == 0)) {
+            promotePawn((PawnPiece)piece);
+        }
+
         return 0;
+    }
+
+    /* promote a pawn piece to a queen, handles board replacement */
+    private void promotePawn(PawnPiece piece) {
+        int loc_x = piece.getLocX();
+        int loc_y = piece.getLocY();
+
+        /* add new piece to board, copy constructor handles all attributes */
+        Piece promotedPiece = new QueenPiece(piece, this);
+        spaces[loc_x][loc_y] = promotedPiece;
+
+        /* replace piece in pieceList */
+        List<Piece> pieceList = getPieces(piece.getPlayer());
+        pieceList.remove(piece);
+        pieceList.add(promotedPiece);
+    }
+
+    /* get the list of pieces for player 'player' */
+    /* returns a List<Piece> type                 */
+    private List<Piece> getPieces(int player) {
+        return (player == 1) ? player1Pieces : player2Pieces;
     }
 
     /* Gets piece at given location.  Returns null if out of bounds or no piece is there. */

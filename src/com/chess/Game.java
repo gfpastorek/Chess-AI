@@ -14,6 +14,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Game {
 
+    final static int AI_MOVE_DELAY = 10;
+
     JFrame frame;
     GUI gui;
     Board board;
@@ -221,6 +223,12 @@ public class Game {
 
         /* Reset the game and the scores. */
         public void actionPerformed(ActionEvent e){
+
+            /* check that we didn't click it during the AI move window */
+            if(playerIsAI[player_turn-1]) {
+                return;
+            }
+
             /* give victory to opposing player, XOR with 3 inverts 1 and 2 */
             giveVictory(player_turn ^ 3);
             newGame();
@@ -235,76 +243,6 @@ public class Game {
         public SpaceClickListener(int x, int y){
             loc_x = x;
             loc_y = y;
-        }
-
-        /* handler for clicking a space when no space is currently selected */
-        /* highlights the space if all verifications pass                   */
-        private void handleFirstClick(int loc_x, int loc_y){
-
-            /* select a piece */
-            Piece piece = board.getPiece(loc_x, loc_y);
-
-            /* check if this space click was valid */
-            if(piece == null){
-                return;
-            }
-
-            /* make sure it is the player's turn */
-            if(player_turn != piece.getPlayer()){
-                return;
-            }
-
-            space_selected = true;
-            highlighted_x = loc_x;
-            highlighted_y = loc_y;
-
-            gui.highlightSpace(highlighted_x, highlighted_y);
-        }
-
-        /* handler for clicking a space when another space is already highlighted */
-        /* moves selected piece to space if all verifications pass                */
-        private void handleSecondClick(int loc_x, int loc_y){
-
-            /* piece was already select, select destination */
-            space_selected = false;
-            gui.unhighlightSpace(highlighted_x, highlighted_y);
-
-            try {
-
-                /* copy the board, if move succeeds store this is previousBoard for undo */
-                Board potentialPreviousBoard = new Board(board);
-
-                /* attempt to move piece, switch current player turn if the move was valid */
-                int result = board.movePiece(highlighted_x, highlighted_y, loc_x, loc_y);
-
-                switch(result) {
-
-                    /* success - move the piece and switch turns, also checks for game ending conditions */
-                    case 0:
-                        gui.clearSpace(highlighted_x, highlighted_y);
-                        gui.fillSpace(board.getPiece(loc_x, loc_y), loc_x, loc_y);
-                        player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
-                        gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
-                        checkIfGameOver();
-                        previousBoard = potentialPreviousBoard;
-                        gui.setUndoButtonEnabled(true);
-                        break;
-
-                    /* general invalid move */
-                    case 1:
-                        gui.setStatusbar("Invalid move");
-                        break;
-
-                    /* causes check */
-                    case 2:
-                        gui.setStatusbar("Invalid move: " + playerName[player_turn-1] + " would be in check!");
-                        break;
-                }
-
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                throw new RuntimeException();
-            }
         }
 
         /* Handle the space click */
@@ -360,10 +298,85 @@ public class Game {
 
         /* make the move by activating the GUI */
         //TODO - lock GUI?
-        gui.clickSpace(move[0], move[1]);
-        //Thread.sleep(500);
-        gui.clickSpace(move[2], move[3]);
-
+        Thread.sleep(AI_MOVE_DELAY);
+        //gui.clickSpace(move[0], move[1]);
+        handleFirstClick(move[0], move[1]);
+        Thread.sleep(AI_MOVE_DELAY);
+        //gui.clickSpace(move[2], move[3]);
+        handleSecondClick(move[2], move[3]);
     }
+
+
+
+    /* handler for clicking a space when no space is currently selected */
+        /* highlights the space if all verifications pass                   */
+    private void handleFirstClick(int loc_x, int loc_y){
+
+            /* select a piece */
+        Piece piece = board.getPiece(loc_x, loc_y);
+
+            /* check if this space click was valid */
+        if(piece == null){
+            return;
+        }
+
+            /* make sure it is the player's turn */
+        if(player_turn != piece.getPlayer()){
+            return;
+        }
+
+        space_selected = true;
+        highlighted_x = loc_x;
+        highlighted_y = loc_y;
+
+        gui.highlightSpace(highlighted_x, highlighted_y);
+    }
+
+    /* handler for clicking a space when another space is already highlighted */
+        /* moves selected piece to space if all verifications pass                */
+    private void handleSecondClick(int loc_x, int loc_y){
+
+            /* piece was already select, select destination */
+        space_selected = false;
+        gui.unhighlightSpace(highlighted_x, highlighted_y);
+
+        try {
+
+                /* copy the board, if move succeeds store this is previousBoard for undo */
+            Board potentialPreviousBoard = new Board(board);
+
+                /* attempt to move piece, switch current player turn if the move was valid */
+            int result = board.movePiece(highlighted_x, highlighted_y, loc_x, loc_y);
+
+            switch(result) {
+
+                    /* success - move the piece and switch turns, also checks for game ending conditions */
+                case 0:
+                    gui.clearSpace(highlighted_x, highlighted_y);
+                    gui.fillSpace(board.getPiece(loc_x, loc_y), loc_x, loc_y);
+                    player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
+                    gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
+                    checkIfGameOver();
+                    previousBoard = potentialPreviousBoard;
+                    gui.setUndoButtonEnabled(true);
+                    break;
+
+                    /* general invalid move */
+                case 1:
+                    gui.setStatusbar("Invalid move");
+                    break;
+
+                    /* causes check */
+                case 2:
+                    gui.setStatusbar("Invalid move: " + playerName[player_turn-1] + " would be in check!");
+                    break;
+            }
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
 
 }
