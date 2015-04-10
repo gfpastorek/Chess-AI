@@ -14,9 +14,11 @@ public class ChessAI {
 
     private ArrayList<Piece> pieces;
     private int difficulty;
+    private Board board;
 
-    public ChessAI(int difficulty_, ArrayList<Piece> pieces_) {
+    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) {
         pieces = pieces_;
+        board = board_;
         difficulty = difficulty_;
     }
 
@@ -51,6 +53,10 @@ public class ChessAI {
             }
         }
 
+         /*  copy pieces list, shuffle order of pieces for random selection */
+        potentialPieces = (ArrayList<Piece>) pieces.clone();
+        Collections.shuffle(potentialPieces);
+
         /* select a random (valid) move from a random piece */
         while(!potentialPieces.isEmpty()) {
             Piece piece = potentialPieces.remove(0);
@@ -64,6 +70,43 @@ public class ChessAI {
         /* exception, checkmate or stalemate should have occured */
         throw new IllegalStateException("No valid moves for AI player.");
 
+    }
+
+    /* rank moves from best to worst, look-ahead factor is 1 */
+    private List<Integer[]> rankMoves(List<Integer[]> moveSet) throws Exception {
+
+        //TODO - sort moves by score
+
+        for(Integer[] move : moveSet) {
+            Piece piece = board.getPiece(move[0], move[1]);
+            Piece destPiece = board.getPiece(move[2], move[3]);
+            boolean vulnerableAtSrc = board.canBeAttacked(piece);
+
+            /* make copy of board to analyze 'what if' we moved piece to destination */
+            Board testBoard = new Board(board);
+            Piece testPiece = testBoard.getPiece(move[0], move[1]);
+            testBoard.movePiece(move[0], move[1], move[2], move[3]);
+            boolean vulnerableAtDst = testBoard.canBeAttacked(testPiece);
+
+            int score = moveScore(piece, destPiece, vulnerableAtSrc, vulnerableAtDst);
+
+        }
+
+        return null;
+    }
+
+    /* return the numerical score (higher is better) of the move moving        */
+    /* 'piece' to space 'destPiece' where vulnerableAtSrc and vulnerableAtDst  */
+    /* describe 'piece''s vulnerability and the respective locations           */
+    private int moveScore(Piece piece, Piece destPiece, boolean vulnerableAtSrc, boolean vulnerableAtDst) {
+        int score = 0;
+        if(vulnerableAtSrc){
+            score -= PieceRank.getRank(piece);
+        }
+        if(vulnerableAtDst){
+            score -= PieceRank.getRank(piece);
+        }
+        return PieceRank.getRank(destPiece) + score;
     }
 
 
