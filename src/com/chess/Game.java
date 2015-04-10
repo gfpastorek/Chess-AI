@@ -5,6 +5,9 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+
+import ChessGUI.*;
 
 /**
  * Created by Greg Pastorek on 2/24/2015.
@@ -14,10 +17,16 @@ public class Game {
     final static int AI_MOVE_DELAY = 0;
 
     JFrame frame;
-    GUI gui;
+    ChessGUI gui;
     Board board;
     boolean running;
     boolean aiLock;
+
+    int offset;
+    int spacing;
+
+    LinkedList<int []> movesQueue = new LinkedList<int []>();
+    LinkedList<Boolean> responseQueue = new LinkedList<Boolean>();
 
     /* game state variables */
     int player1Score;
@@ -35,18 +44,12 @@ public class Game {
 
     }
 
-    public void setGUI(GUI gui_){
+    public void setGUI(ChessGUI gui_){
         gui = gui_;
     }
 
     public void setFrame(JFrame f){
         frame = f;
-    }
-
-    public void setPlayerNames(String player1Name_, String player2Name_){
-        playerName[0] = player1Name_;
-        playerName[1] = player2Name_;
-        gui.setPlayerNames(playerName[0], playerName[1]);
     }
 
     /* check if any game ending conditions are met, and handle them appropriately */
@@ -57,19 +60,22 @@ public class Game {
         }
 
         if (board.isDraw()) {
-            gui.setStatusbar("Draw!");
+            //gui.setStatusbar("Draw!");
             JOptionPane.showMessageDialog(frame, "Draw!");
-            newGame();
+            gui.gameOver();
+            running=false;
             return true;
         }
         else if(board.isCheckmated(1)){
             giveVictory(2);
-            newGame();
+            gui.gameOver();
+            running=false;
             return true;
         }
         else if (board.isCheckmated(2)) {
             giveVictory(1);
-            newGame();
+            gui.gameOver();
+            running=false;
             return true;
         }
 
@@ -83,17 +89,44 @@ public class Game {
         } else {
             player2Score++;
         }
-        gui.setScore(player1Score, player2Score);
-        gui.setStatusbar(playerName[player-1] + " wins!");
+        //gui.setScore(player1Score, player2Score);
+        //gui.setStatusbar(playerName[player-1] + " wins!");
         JOptionPane.showMessageDialog(frame, playerName[player-1] + " wins!");
     }
 
     /* clear game, wait for user to click 'start' */
-    public void newGame(){
-        gui.clearAllSpaces();
-        board = null;  // delete board object
-        running = false;
-        gui.setStartButtonText("Start");
+    public void newGame(int type){
+        /*if(running){
+            if(!(promptUserForRestart(1) && promptUserForRestart(2))){
+                return;
+            }
+        }*/
+
+        board = new Board(8,8);
+        board.resetBoard(true);
+        gui.updatePieces(board);
+        running = true;
+        player_turn=1;
+        gui.updatePieces(board);
+        //gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
+        //TODO - refactor segment below into it's own method
+        switch(type) {
+            case 1:
+                playerIsAI[0]=true;
+                aiPlayers[0]= new ChessAI(0, board.player1Pieces);
+                playerIsAI[1]=false;
+                break;
+            case 2:
+                playerIsAI[0]=false;
+                playerIsAI[1]=false;
+                break;
+            case 3:
+                playerIsAI[0]=true;
+                aiPlayers[0]= new ChessAI(0, board.player1Pieces);
+                playerIsAI[1] = true;
+                aiPlayers[1] = new ChessAI(0, board.player2Pieces);
+                break;
+        }
     }
 
     public boolean isRunning() {
@@ -113,21 +146,6 @@ public class Game {
                 options[1]);
         return n == 0;
     }
-
-    /* makes the GUI match the board object */
-    private void synchronizeGUIwithBoard() throws InvalidArgumentException {
-
-        /* loop over entire board and fill spaces where there are pieces */
-        for(int x = 0; x < board.getMaxX(); x++){
-            for(int y = 0; y < board.getMaxY(); y++){
-                Piece piece = board.getPiece(x, y);
-                if(piece != null) {
-                    gui.fillSpace(piece, x, y);
-                }
-            }
-        }
-    }
-
     /* pop up prompt asking if user would like to play classic chess or Chuck Norris Chess */
     /* returns true if they select classic chess                                           */
     private boolean promptGameMode(){
@@ -143,97 +161,22 @@ public class Game {
         return n == 0;
     }
 
-
-    public class StartClickListener implements ActionListener {
-
-        /* start's a new game. Does not reset the score. */
-        public void actionPerformed(ActionEvent e){
-            try
-            {
-                /* if we are restarting, prompt both users */
-                if(running){
-                    if(!(promptUserForRestart(1) && promptUserForRestart(2))){
-                        return;
-                    }
-                }
-
-                /* prompt user for game mode */
-                boolean selectedClassicChess = promptGameMode();
-
-                /* initialize board and GUI */
-                gui.setStartButtonText("Restart");
-                gui.clearAllSpaces();
-                board = new Board(8,8);
-                board.resetBoard(selectedClassicChess);
-                running = true;
-
-                synchronizeGUIwithBoard();
-
-                gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
-
-                //TODO - refactor segment below into it's own method
-                playerIsAI[0] = true;
-                aiPlayers[0] = new ChessAI(0, board.player1Pieces);
-
-                playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(0, board.player2Pieces);
-
-            }
-            catch (InvalidArgumentException e1)
-            {
-                e1.printStackTrace();
-                throw new RuntimeException();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
-
-    public class UndoClickListener implements ActionListener {
-
-        /* Reset the game and the scores. */
-        public void actionPerformed(ActionEvent e){
-
+    public void undoTrigger(){
             if(previousBoard == null){
                 return;
             }
-
             try {
                 /* restore previous board and then update GUI to match */
                 board = new Board(previousBoard);
                 previousBoard = null;
-                gui.clearAllSpaces();
-                synchronizeGUIwithBoard();
+                gui.updatePieces(board);
                 player_turn ^= 3;  //switch player turn between 1 and 2
-                gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
-                gui.setUndoButtonEnabled(false);
             } catch (Exception e1) {
                 e1.printStackTrace();
                 throw new RuntimeException();
             }
 
-        }
     }
-
-
-    public class ForfeitClickListener implements ActionListener {
-
-        /* Reset the game and the scores. */
-        public void actionPerformed(ActionEvent e){
-
-            /* check that we didn't click it during the AI move window */
-            if(playerIsAI[player_turn-1]) {
-                return;
-            }
-
-            /* give victory to opposing player, XOR with 3 inverts 1 and 2 */
-            giveVictory(player_turn ^ 3);
-            newGame();
-        }
-    }
-
-
     public class SpaceClickListener implements ActionListener {
 
         int loc_x, loc_y;
@@ -245,12 +188,12 @@ public class Game {
 
         /* Handle the space click */
         public void actionPerformed(ActionEvent e){
-
+            /*
             if(!space_selected){
                 handleFirstClick(loc_x, loc_y);
             } else{
                 handleSecondClick(loc_x, loc_y);
-            }
+            }*/
         }
 
     }
@@ -261,6 +204,24 @@ public class Game {
             aiLock = true;
             makeAiMove(player_turn);
             aiLock = false;
+        }
+    }
+    public void makeMove(){
+        if(playerIsAI[player_turn-1]){
+            try {
+                pollAI();
+            }
+            catch (Exception e){
+
+            }
+        }
+        else{
+            try {
+                Thread.sleep(50);
+            }
+            catch (Exception e){
+
+            }
         }
     }
 
@@ -285,31 +246,52 @@ public class Game {
             throw new IllegalStateException("Missing AI system.");
         }
 
-        /* unlight any spaces that may be have been highlighted by user */
-        if(space_selected) {
-            gui.unhighlightSpace(highlighted_x, highlighted_y);
-            space_selected = false;
-        }
-
         /* returns move as [src_x, src_y, dst_x, dst_y] */
         Integer[] move = ai.getMove();
+        previousBoard = new Board(board);
+        board.movePiece(move[0], move[1], move[2], move[3]);
+        player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
+
+        // TODO add this function
+        //gui.setUndoButtonEnabled(true);
 
         /* make the move by activating the GUI */
-        //TODO - lock GUI?
-        Thread.sleep(AI_MOVE_DELAY);
-        handleFirstClick(move[0], move[1]);
-        Thread.sleep(AI_MOVE_DELAY);
-        handleSecondClick(move[2], move[3]);
+        gui.updatePieces(board);
+
+    }
+    public boolean moveReceiver(int [] possibleMove){
+        int [] newMove=new int [4];
+        newMove[0]= convertUnits(possibleMove[0]);
+        newMove[1]= convertUnits(possibleMove[1]);
+        newMove[2]= convertUnits(possibleMove[2]);
+        newMove[3]= convertUnits(possibleMove[3]);
+        movesQueue.add(newMove);
+        handleInput();
+        while(responseQueue.isEmpty()){
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } // sleep, my child
+        return responseQueue.poll();
+    }
+    private int convertUnits(int oldUnits){
+        return (oldUnits-offset)/spacing;
     }
 
+    private void handleInput(){
 
-
-    /* handler for clicking a space when no space is currently selected */
-        /* highlights the space if all verifications pass                   */
-    private void handleFirstClick(int loc_x, int loc_y){
-
+        if (movesQueue.isEmpty()){
+            return;
+        }
+        int [] curLoc= movesQueue.poll();
+        int xInitial= curLoc[0];
+        int yInitial= curLoc[1];
+        int xEnd= curLoc[2];
+        int yEnd= curLoc[3];
             /* select a piece */
-        Piece piece = board.getPiece(loc_x, loc_y);
+        Piece piece = board.getPiece(xInitial, yInitial);
 
             /* check if this space click was valid */
         if(piece == null){
@@ -318,53 +300,38 @@ public class Game {
 
             /* make sure it is the player's turn */
         if(player_turn != piece.getPlayer()){
+            responseQueue.push(false);
             return;
         }
-
-        space_selected = true;
-        highlighted_x = loc_x;
-        highlighted_y = loc_y;
-
-        gui.highlightSpace(highlighted_x, highlighted_y);
-    }
-
-    /* handler for clicking a space when another space is already highlighted */
-        /* moves selected piece to space if all verifications pass                */
-    private void handleSecondClick(int loc_x, int loc_y){
-
-            /* piece was already select, select destination */
-        space_selected = false;
-        gui.unhighlightSpace(highlighted_x, highlighted_y);
-
         try {
 
-                /* copy the board, if move succeeds store this is previousBoard for undo */
+            /* copy the board, if move succeeds store this is previousBoard for undo */
             Board potentialPreviousBoard = new Board(board);
 
                 /* attempt to move piece, switch current player turn if the move was valid */
-            int result = board.movePiece(highlighted_x, highlighted_y, loc_x, loc_y);
+            int result = board.movePiece(xInitial, yInitial, xEnd, yEnd);
 
             switch(result) {
 
                     /* success - move the piece and switch turns, also checks for game ending conditions */
                 case 0:
-                    gui.clearSpace(highlighted_x, highlighted_y);
-                    gui.fillSpace(board.getPiece(loc_x, loc_y), loc_x, loc_y);
                     player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
-                    gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
-                    checkIfGameOver();
+                    //gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
                     previousBoard = potentialPreviousBoard;
-                    gui.setUndoButtonEnabled(true);
+                    //gui.setUndoButtonEnabled(true);
+                    responseQueue.push(true);
                     break;
 
                     /* general invalid move */
                 case 1:
-                    gui.setStatusbar("Invalid move");
+                    responseQueue.push(false);
+                    //gui.setStatusbar("Invalid move");
                     break;
 
                     /* causes check */
                 case 2:
-                    gui.setStatusbar("Invalid move: " + playerName[player_turn-1] + " would be in check!");
+                    responseQueue.push(false);
+                    //gui.setStatusbar("Invalid move: " + playerName[player_turn-1] + " would be in check!");
                     break;
             }
 
@@ -373,6 +340,18 @@ public class Game {
             throw new RuntimeException();
         }
     }
+    public void setPlayerNames(String player1Name_, String player2Name_){
+        playerName[0] = player1Name_;
+        playerName[1] = player2Name_;
+        gui.setPlayerNames(player1Name_, player2Name_);
+    }
+    public int getPlayerScore(int Player){
+        if (Player==1){
+            return player1Score;
+        }
+        else{
+            return player2Score;
+        }
 
-
+    }
 }
