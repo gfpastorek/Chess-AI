@@ -37,18 +37,13 @@ public class PawnPiece extends Piece {
         if(Math.abs(dir_y) > 2 || Math.abs(dir_x) > 1){
             return false;
         }
-        boolean eligibleSkip=false;
-        if ((Math.abs(dir_y)==2)&&(!board.hasPawnSkipped(player))){
-            eligibleSkip=true;
-        }
+
         /* pawn can only move two spaces on first move, no blockage, and it is not a capture */
         if(Math.abs(dir_y) == 2 &&
-                (hasMoved||!eligibleSkip||Math.abs(dir_x) > 0 || board.getPiece(dest_x, (int)(dest_y - Math.signum(dir_y))) != null)){
+                (hasMoved || Math.abs(dir_x) > 0 || board.getPiece(dest_x, (int)(dest_y - Math.signum(dir_y))) != null)){
             return false;
         }
-        if(Math.abs(dir_y)==2){
-            board.setPawnSkipped(player);
-        }
+
         /* players can only move away from start in y direction */
         if(player == 1 && dir_y < 1 || player == 2 && dir_y > -1){
             return false;
