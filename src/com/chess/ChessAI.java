@@ -51,7 +51,17 @@ public class ChessAI {
             }
         }
 
-        /* exception, checkmate should have occured */
+        /* select a random (valid) move from a random piece */
+        while(!potentialPieces.isEmpty()) {
+            Piece piece = potentialPieces.remove(0);
+            List<Integer[]> moveSet = piece.validDestinationSet();
+            if(!moveSet.isEmpty()) {
+                Collections.shuffle(moveSet);
+                return moveSet.remove(0);
+            }
+        }
+
+        /* exception, checkmate or stalemate should have occured */
         throw new IllegalStateException("No valid moves for AI player.");
 
     }

@@ -369,7 +369,6 @@ public class Board {
                 nextBoard.player2King = new KingPiece((KingPiece)copyBoard.player1King, nextBoard);
             }
 
-
             /* a valid move will satisfy "isValidMove" and will not cause a check */
             if (oppPiece.isValidMove(oppPiece.getLocX(), oppPiece.getLocY(), king_x, king_y)
                     && !causesCheck(oppPiece, king_x, king_y, nextBoard)){
@@ -415,11 +414,42 @@ public class Board {
         return ret;
     }
 
-    public boolean isStalemate() throws Exception {
+    public boolean isDraw() throws Exception {
         boolean player1isStalemated = (!isInCheck(1) && !playerCanMove(1));
         boolean player2isStalemated = (!isInCheck(2) && !playerCanMove(2));
-        return player1isStalemated || player2isStalemated;
+        boolean bareKing = checkForBareKing();
+
+        if(player1isStalemated) {
+            System.out.println("p1 stalemated!!!");
+        }
+
+        if(player2isStalemated) {
+            System.out.println("p2 stalemated!!!");
+        }
+
+        if(bareKing) {
+            System.out.println("bare king!!!");
+        }
+
+        return player1isStalemated || player2isStalemated || bareKing;
     }
+
+    /* checks for the bare king condition of both players */
+    /* bare king is when only kings are left on the board */
+    private boolean checkForBareKing() {
+        return checkForBareKing(1) && checkForBareKing(2);
+    }
+
+    /* checks for bare king of player 'player' */
+    private boolean checkForBareKing(int player) {
+        for(Piece piece : getPieces(player)) {
+            if(!piece.isCaptured() && piece.getClass() != KingPiece.class){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /* check if any of player's pieces are moveable */
     private boolean playerCanMove(int player) throws Exception {

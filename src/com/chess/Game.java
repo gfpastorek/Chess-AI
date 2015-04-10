@@ -3,18 +3,15 @@ package com.chess;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Greg Pastorek on 2/24/2015.
  */
 public class Game {
 
-    final static int AI_MOVE_DELAY = 10;
+    final static int AI_MOVE_DELAY = 0;
 
     JFrame frame;
     GUI gui;
@@ -59,9 +56,9 @@ public class Game {
             return false;
         }
 
-        if (board.isStalemate()) {
-            gui.setStatusbar("Stalemate!");
-            JOptionPane.showMessageDialog(frame, "Stalemate!");
+        if (board.isDraw()) {
+            gui.setStatusbar("Draw!");
+            JOptionPane.showMessageDialog(frame, "Draw!");
             newGame();
             return true;
         }
@@ -88,6 +85,7 @@ public class Game {
         }
         gui.setScore(player1Score, player2Score);
         gui.setStatusbar(playerName[player-1] + " wins!");
+        JOptionPane.showMessageDialog(frame, playerName[player-1] + " wins!");
     }
 
     /* clear game, wait for user to click 'start' */
@@ -299,10 +297,8 @@ public class Game {
         /* make the move by activating the GUI */
         //TODO - lock GUI?
         Thread.sleep(AI_MOVE_DELAY);
-        //gui.clickSpace(move[0], move[1]);
         handleFirstClick(move[0], move[1]);
         Thread.sleep(AI_MOVE_DELAY);
-        //gui.clickSpace(move[2], move[3]);
         handleSecondClick(move[2], move[3]);
     }
 

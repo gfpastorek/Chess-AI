@@ -47,6 +47,11 @@ public class KingPiece extends Piece {
         /* check the space for a piece */
         Piece space = board.getPiece(src_x, src_y);
 
+        /* must not be adjacent to opponents King - a hole in causesCheck makes this possible */
+        if(adjacentToKing(dest_x, dest_y)) {
+            return false;
+        }
+
         if(space != null){
             /* check if we are blocked */
             /* return false if the destination contains one of our own pieces*/
@@ -61,6 +66,19 @@ public class KingPiece extends Piece {
 
 
         return true;
+    }
+
+
+    private boolean adjacentToKing(int dest_x, int  dest_y) {
+        for(int i = -1; i < 2; i++) {
+            for(int j = -1; j < 2; j++) {
+                Piece adjSpace = board.getPiece(dest_x + i, dest_y + j);
+                if(adjSpace != null && adjSpace == board.getPlayerKing(player ^ 3)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 

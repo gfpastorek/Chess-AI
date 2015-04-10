@@ -6,8 +6,6 @@ import com.chess.pieces.*;
 
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -204,7 +202,7 @@ public class BoardTest {
         doReturn(false).when(testBoard).isInCheck(anyInt());
         doReturn(false).when(piece).isValidMove(anyInt(), anyInt(), anyInt(), anyInt());
 
-        assertEquals("Stalemate", true, testBoard.isStalemate());
+        assertEquals("Stalemate", true, testBoard.isDraw());
 
     }
 
