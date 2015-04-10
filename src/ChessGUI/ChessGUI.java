@@ -45,6 +45,9 @@ import com.chess.*;
         private AudioInputStream audioIn;
         private String p1_name;
         private String p2_name;
+    
+        static File workingDirectory = new File(System.getProperty("user.dir"));
+        static File imageDirectory = new File(workingDirectory, "src\\ChessGUI\\ChessPiecePNG");
 
         private JLabel curMovedPiece;
         private JPanel originalTile;
@@ -124,24 +127,24 @@ import com.chess.*;
             window.setJMenuBar(menubar);
         }
         private void setSourceFiles(){
-            whiteKnightImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteKnight.png");
-            whiteRookImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteRook.png");
-            whiteKingImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteKing.png");
-            whiteQueenImage= new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteQueen.png");
-            whitePawnImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whitePawn.png");
-            whiteBishopImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteBishop.png");
-            whiteMountedBishopImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteMountedBishop.png");
-            whiteMountedRookImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\whiteMountedRook.png");
-            blackKnightImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackKnight.png");
-            blackRookImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackRook.png");
-            blackKingImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackKing.png");
-            blackQueenImage= new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackQueen.png");
-            blackPawnImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackPawn.png");
-            blackBishopImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackBishop.png");
-            blackMountedBishopImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackMountedBishop.png");
-            blackMountedRookImage=  new ImageIcon("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\blackMountedRook.png");
+            whiteKnightImage=  new ImageIcon(imageDirectory + "\\" + "whiteKnight.png");
+            whiteRookImage=  new ImageIcon(imageDirectory + "\\" + "whiteRook.png");
+            whiteKingImage=  new ImageIcon(imageDirectory + "\\" + "whiteKing.png");
+            whiteQueenImage= new ImageIcon(imageDirectory + "\\" + "whiteQueen.png");
+            whitePawnImage=  new ImageIcon(imageDirectory + "\\" + "whitePawn.png");
+            whiteBishopImage=  new ImageIcon(imageDirectory + "\\" + "whiteBishop.png");
+            whiteMountedBishopImage=  new ImageIcon(imageDirectory + "\\" + "whiteMountedBishop.png");
+            whiteMountedRookImage=  new ImageIcon(imageDirectory + "\\" + "whiteMountedRook.png");
+            blackKnightImage=  new ImageIcon(imageDirectory + "\\" + "blackKnight.png");
+            blackRookImage=  new ImageIcon(imageDirectory + "\\" + "blackRook.png");
+            blackKingImage=  new ImageIcon(imageDirectory + "\\" + "blackKing.png");
+            blackQueenImage= new ImageIcon(imageDirectory + "\\" + "blackQueen.png");
+            blackPawnImage=  new ImageIcon(imageDirectory + "\\" + "blackPawn.png");
+            blackBishopImage=  new ImageIcon(imageDirectory + "\\" + "blackBishop.png");
+            blackMountedBishopImage=  new ImageIcon(imageDirectory + "\\" + "blackMountedBishop.png");
+            blackMountedRookImage=  new ImageIcon(imageDirectory + "\\" + "blackMountedRook.png");
             try {
-                audioIn = AudioSystem.getAudioInputStream(new File("C:\\Users\\Yuriy\\IdeaProjects\\Assignment1.2\\src\\ChessGUI\\ChessPiecePNG\\ChessMove.wav"));
+                audioIn = AudioSystem.getAudioInputStream(new File(imageDirectory + "\\" + "ChessMove.wav"));
                 moveClick = AudioSystem.getClip();
                 moveClick.open(audioIn);
             }

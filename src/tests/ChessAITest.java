@@ -25,7 +25,7 @@ public class ChessAITest extends TestCase {
         testBoard.addPiece(blackKing, 7, 7);
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
-        ai_pieces.add(whiteKing);/*
+        ai_pieces.add(whiteKing);
         ChessAI ai = new ChessAI(0, testBoard, ai_pieces);
 
         Integer[] move = ai.getMove();
@@ -59,7 +59,7 @@ public class ChessAITest extends TestCase {
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
         ai_pieces.add(whiteKing);
-       /* ChessAI ai = new ChessAI(0, testBoard, ai_pieces);
+        ChessAI ai = new ChessAI(0, testBoard, ai_pieces);
 
         Integer[] move = ai.getMove();
 
@@ -73,7 +73,7 @@ public class ChessAITest extends TestCase {
         boolean validMove = whiteKing.isValidMove(src_x, src_y, dst_x, dst_y);
 
         assertEquals("AI move was valid.", true, movedKing && killedQueen && validMove);
-*/
+
     }
 
 }
