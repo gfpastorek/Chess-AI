@@ -10,6 +10,7 @@ import java.util.List;
  * Created by Greg Pastorek on 2/6/2015.
  */
 public class KingPiece extends Piece {
+    boolean movedKing=false;
 
     public KingPiece(Board parent, int player_){
         super(parent, player_);

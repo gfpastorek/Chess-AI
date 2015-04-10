@@ -44,3 +44,8 @@ Temporary Items
 
 .idea
 .idea/*
+.idea/workspace.xml
+.idea/workspace.xml
+.idea/misc.xml
+*.xml
+out/production/Chess-AI/com/chess/ChessAI.class

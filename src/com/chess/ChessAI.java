@@ -53,19 +53,6 @@ public class ChessAI {
             }
         }
 
-         /*  copy pieces list, shuffle order of pieces for random selection */
-        potentialPieces = (ArrayList<Piece>) pieces.clone();
-        Collections.shuffle(potentialPieces);
-
-        /* select a random (valid) move from a random piece */
-        while(!potentialPieces.isEmpty()) {
-            Piece piece = potentialPieces.remove(0);
-            List<Integer[]> moveSet = piece.validDestinationSet();
-            if(!moveSet.isEmpty()) {
-                Collections.shuffle(moveSet);
-                return moveSet.remove(0);
-            }
-        }
         return null;
     }
 

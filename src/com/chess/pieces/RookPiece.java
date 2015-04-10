@@ -10,6 +10,7 @@ import java.util.List;
  * Created by Greg Pastorek on 2/6/2015.
  */
 public class RookPiece extends Piece {
+    boolean movedRook=false;
 
     public RookPiece(Board parent, int player_){
         super(parent, player_);
@@ -35,7 +36,9 @@ public class RookPiece extends Piece {
         if(dir_x*dir_y != 0){
             return false;
         }
-
+        /*if (castlingWorks()){
+            return true;
+        }*/
         /* iterate through the spaces in the path and check that we are not blocked */
         while(src_x != dest_x || src_y != dest_y){
 
@@ -81,6 +84,65 @@ public class RookPiece extends Piece {
 
         return validMoves;
 
+    }
+    protected boolean castlingWorks(){
+        //TODO implement castling
+        if(board.hasCastled(player)){
+            return false;
+        }
+        int curRow=1;
+        if (player==2){
+            curRow=8;
+        }
+        if (loc_x==1 && loc_y==curRow && board.getPiece(4,curRow).getClass()==KingPiece.class && board.getPiece(3,curRow)==null &&
+                board.getPiece(2,curRow)==null){
+            if (!hasMoved && !board.getPiece(4,curRow).getMoved()){
+                try {
+                    Board testAttacked = new Board(board);
+                    PawnPiece attackTest1 = new PawnPiece(board, player);
+                    PawnPiece attackTest2 = new PawnPiece(board, player);
+                    testAttacked.addPiece(attackTest1, 2, curRow);
+                    testAttacked.addPiece(attackTest2, 3, curRow);
+                    try {
+                        if (!(testAttacked.canBeAttacked(attackTest1) || testAttacked.canBeAttacked(attackTest2) || testAttacked.canBeAttacked(this))) {
+                            return true;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        if (loc_x==8 && loc_y==curRow && board.getPiece(4,curRow).getClass()==KingPiece.class && board.getPiece(5,curRow)==null &&
+                board.getPiece(6,curRow)==null && board.getPiece(7,curRow)==null){
+            if (!hasMoved && !board.getPiece(4,curRow).getMoved()){
+                try {
+                    Board testAttacked = new Board(board);
+                    PawnPiece attackTest1 = new PawnPiece(board, player);
+                    PawnPiece attackTest2 = new PawnPiece(board, player);
+                    PawnPiece attackTest3 = new PawnPiece(board, player);
+                    testAttacked.addPiece(attackTest1, 5, curRow);
+                    testAttacked.addPiece(attackTest2, 6, curRow);
+                    testAttacked.addPiece(attackTest3, 7, curRow);
+                    try {
+                        if (!(testAttacked.canBeAttacked(attackTest1) || testAttacked.canBeAttacked(attackTest2) ||testAttacked.canBeAttacked(attackTest3) || testAttacked.canBeAttacked(this))) {
+                            return true;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return false;
     }
 
 }

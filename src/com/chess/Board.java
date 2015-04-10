@@ -28,6 +28,10 @@ public class Board {
     /* points to the king pieces */
     Piece player1King;
     Piece player2King;
+    boolean PawnSkip1=false;
+    boolean PawnSkip2=false;
+    boolean Castle1=false;
+    boolean Castle2=false;
 
     public Board(int dim_x, int dim_y){
         board_x = dim_x;
@@ -480,6 +484,38 @@ public class Board {
 
         return false;
 
+    }
+    public boolean hasPawnSkipped(int player){
+        if (player==1){
+            return PawnSkip1;
+        }
+        else{
+            return PawnSkip2;
+        }
+    }
+    public void setPawnSkipped(int player){
+        if (player==1){
+            PawnSkip1=true;
+        }
+        else{
+            PawnSkip2=true;
+        }
+    }
+    public boolean hasCastled(int player){
+        if (player==1){
+            return Castle1;
+        }
+        else{
+            return Castle2;
+        }
+    }
+    public void setCastled(int player){
+        if (player==1){
+            Castle1=true;
+        }
+        else{
+            Castle2=true;
+        }
     }
 
 }

@@ -67,6 +67,9 @@ public abstract class Piece {
     public void setHasMoved(boolean value){
         hasMoved = value;
     }
+    public boolean getMoved(){
+        return hasMoved;
+    }
 
     /* set the location of the coordinates contained in this class */
     public void setLocation(int loc_x, int loc_y){
