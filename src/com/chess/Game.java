@@ -95,7 +95,7 @@ public class Game {
     }
 
     /* clear game, wait for user to click 'start' */
-    public void newGame(int type){
+    public void newGame(int type) throws InvalidArgumentException {
         /*if(running){
             if(!(promptUserForRestart(1) && promptUserForRestart(2))){
                 return;
@@ -113,7 +113,7 @@ public class Game {
         switch(type) {
             case 1:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(1, board, board.player1Pieces);
                 playerIsAI[1]=false;
                 break;
             case 2:
@@ -124,7 +124,7 @@ public class Game {
                 playerIsAI[0]=true;
                 aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(0, board, board.player2Pieces);
+                aiPlayers[1] = new ChessAI(1, board, board.player2Pieces);
                 break;
         }
     }
@@ -207,21 +207,15 @@ public class Game {
         }
     }
     public void makeMove(){
-        if(playerIsAI[player_turn-1]){
-            try {
+        try {
+            if (playerIsAI[player_turn - 1]) {
                 pollAI();
-            }
-            catch (Exception e){
-
-            }
-        }
-        else{
-            try {
+            } else {
                 Thread.sleep(50);
             }
-            catch (Exception e){
-
-            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 

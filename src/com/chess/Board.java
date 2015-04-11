@@ -209,7 +209,7 @@ public class Board {
 
     /* get the list of pieces for player 'player' */
     /* returns a List<Piece> type                 */
-    private List<Piece> getPieces(int player) {
+    public List<Piece> getPieces(int player) {
         return (player == 1) ? player1Pieces : player2Pieces;
     }
 
@@ -305,6 +305,10 @@ public class Board {
     public boolean causesCheck(Piece piece, int dest_x, int dest_y, Board copyBoard) throws Exception {
 
         if(piece == null){
+            return false;
+        }
+
+        if(piece.isCaptured()){
             return false;
         }
 
