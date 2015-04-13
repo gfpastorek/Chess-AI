@@ -331,9 +331,6 @@ public class Board {
             copyPiece.setLocation(dest_x, dest_y);
         }
 
-        /* copy the board before we remove the king, for deeper recursions */
-        //Board nextBoard = new Board(copyBoard);
-
         /* get appropriate king piece and its coordinates */
         int king_x, king_y;
         Piece kingPiece = copyBoard.getPlayerKing(piece.getPlayer());
@@ -368,6 +365,7 @@ public class Board {
                 continue;
             }
 
+            /* copy the board before we remove the king, for deeper recursions */
             Board nextBoard = new Board(copyBoard);
 
             if(nextBoard.getPlayerKing(1) == null) {
