@@ -77,21 +77,48 @@ public class ChessAI {
     private Integer[] getOptimalMove(int depth) throws Exception {
 
         return getOptimalMove(depth, player, board);
-
     }
 
-    /* return the optimal move with lookahead of 1       */
-    /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
+    /* return the optimal move with lookahead of depth       */
+    /* output is a tuple of [src_x, src_y, dst_x, dst_y]     */
     private Integer[] getOptimalMove(int depth, int player, Board board) throws Exception {
 
+        Map.Entry<Integer[], Integer> bestEntry = getOptimalMoveEntry(depth, player, board);
+
+        return bestEntry.getKey();
+    }
+
+    /* return the optimal move score with lookahead of depth       */
+    /* output is an integer                                        */
+    private Integer getOptimalMoveScore(int depth, int player, Board board) throws Exception {
+
+        Map.Entry<Integer[], Integer> bestEntry = getOptimalMoveEntry(depth, player, board);
+
+        /* checkmate was found, score -inf */
+        if(bestEntry == null) {
+            return -1000;
+        }
+
+        return bestEntry.getValue();
+    }
+
+
+    /* get the optimal entry<move, score> with lookahead of depth */
+    /* returns null if no move found, signaling checkmate         */
+    private Map.Entry<Integer[], Integer> getOptimalMoveEntry(int depth, int player, Board board) throws Exception {
+
         List<Integer[]> moveSet = getMoveSet(board.getPieces(player));
+
+        /* check if checkmate was found */
+        if(moveSet.isEmpty()) {
+            return null;
+        }
 
         SortedSet sortedMoves = rankMoves(moveSet, depth, player, board);
 
         Map.Entry<Integer[], Integer> bestEntry = (Map.Entry<Integer[], Integer>) sortedMoves.first();
 
-        return bestEntry.getKey();
-
+        return bestEntry;
     }
 
     /* return the list of all valid moves for this player */
@@ -146,13 +173,13 @@ public class ChessAI {
         Board testBoard = new Board(board);
         testBoard.movePiece(move[0], move[1], move[2], move[3]);
 
-        while(depth > 0) {
-            player ^= 3;
-            Integer[] oppMove = getOptimalMove(--depth, player, testBoard);
-            testBoard.movePiece(oppMove[0], oppMove[1], oppMove[2], oppMove[3]);
+        int reponseScore = 0;
+
+        if(depth > 0) {
+            reponseScore = getOptimalMoveScore(--depth, player^3, testBoard);
         }
 
-        return  scoreBoard(testBoard) - scoreBoard(board);
+        return  scoreBoard(testBoard) - scoreBoard(board) - reponseScore;
 
     }
 
