@@ -1,5 +1,6 @@
 package com.chess;
 
+import com.chess.pieces.PawnPiece;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.*;
@@ -131,28 +132,50 @@ public class ChessAI {
         Board testBoard = new Board(board);
         testBoard.movePiece(move[0], move[1], move[2], move[3]);
 
-        return scoreBoard(board) - scoreBoard(testBoard);
+        return  scoreBoard(testBoard) - scoreBoard(board);
 
     }
 
 
-    /* give the score of the current board for player 'player' */
+
+
+    /*
+    f(p) = 200(K-K')
+            + 9(Q-Q')
+            + 5(R-R')
+            + 3(B-B' + N-N')
+            + 1(P-P')
+            - 0.5(D-D' + S-S' + I-I')
+            + 0.1(M-M') + ...
+
+    KQRBNP = number of kings, queens, rooks, bishops, knights and pawns
+    D,S,I = doubled, blocked and isolated pawns
+    M = Mobility (the number of legal moves)
+    */
     private int scoreBoard(Board board) throws Exception {
+        return scoreBoard(board, player) - scoreBoard(board, player ^ 3);
+    }
+
+
+    /* give the score of the current board for player 'player' */
+    private int scoreBoard(Board board, int player) throws Exception {
 
         int score = 0;
 
-        /* subtract score of current board, if no action is taken */
-        for(Piece examinedPiece : pieces) {
-            if(board.canBeAttacked(examinedPiece)) {
-                score -= 2*PieceRank.getRank(examinedPiece);
+        for(Piece examinedPiece : board.getPieces(player)) {
+            if(!examinedPiece.isCaptured()) {
+                score += 10*PieceRank.getRank(examinedPiece);
+                score += examinedPiece.validDestinationSet().size();
+                //if(board.canBeAttacked(examinedPiece)) {
+                //    score -= 5*PieceRank.getRank(examinedPiece);
+                //}
+                if(examinedPiece.getClass() == PawnPiece.class) {
+                    score -= 5*PieceRank.pawnIsDoubled((PawnPiece)examinedPiece, board);
+                    score -= 5*PieceRank.pawnIsIsolated((PawnPiece)examinedPiece, board);
+                    score -= 5*PieceRank.pawnIsBlocked((PawnPiece)examinedPiece);
+                }
             }
-        }
 
-        /* add score of attackables on opponents board */
-        for(Piece examinedPiece : board.getPieces(player ^ 3)) {
-            if(board.canBeAttacked(examinedPiece)) {
-                score += PieceRank.getRank(examinedPiece);
-            }
         }
 
         return score;
