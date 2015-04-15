@@ -16,6 +16,9 @@ public class ChessAI {
     private Board board;
     private int player;
 
+    final static int NUM_MOVES_THRESHOLD = 10;
+    final static int PRUNING_SCORE = -1;
+
     public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) throws InvalidArgumentException {
         pieces = pieces_;
         board = board_;
@@ -107,14 +110,16 @@ public class ChessAI {
     /* returns null if no move found, signaling checkmate         */
     private Map.Entry<Integer[], Integer> getOptimalMoveEntry(int depth, int player, Board board) throws Exception {
 
-        List<Integer[]> moveSet = getMoveSet(board.getPieces(player));
+        List<Integer[]> moveSet = getMoveSet(board.getPieces(player), depth);
 
         /* check if checkmate was found */
         if(moveSet.isEmpty()) {
             return null;
         }
 
-        SortedSet sortedMoves = rankMoves(moveSet, depth, player, board);
+        int numMoves = moveSet.size();
+
+        SortedSet sortedMoves = rankMoves(moveSet, depth, player, board, numMoves);
 
         Map.Entry<Integer[], Integer> bestEntry = (Map.Entry<Integer[], Integer>) sortedMoves.first();
 
@@ -122,12 +127,12 @@ public class ChessAI {
     }
 
     /* return the list of all valid moves for this player */
-    private List<Integer[]> getMoveSet(List<Piece> pieces_) throws Exception {
+    private List<Integer[]> getMoveSet(List<Piece> pieces_, int depth) throws Exception {
 
-        List<Integer[]> moveSet = new ArrayList<Integer[]>();
+        List<Integer[]> moveSet = Collections.synchronizedList(new ArrayList<Integer[]>());
 
         /* select a random (valid) move from a random piece */
-        for(Piece piece : pieces_) {
+        for (Piece piece : pieces_) {
             moveSet.addAll(piece.validDestinationSet());
         }
 
@@ -139,25 +144,27 @@ public class ChessAI {
 
 
     /* rank moves from best to worst, look-ahead factor is 1 */
-    private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board) throws Exception {
+    private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board, int numMoves) throws Exception {
 
         Map<Integer[], Integer> moveScores = Collections.synchronizedMap(new HashMap<Integer[], Integer>());
 
         SortedSet sortedMoves = new TreeSet<Map.Entry<Integer[], Integer>>(new MoveComparator());
 
-        moveSet.parallelStream().forEach((move) -> {
-            try {
-                int score = moveScore(move, depth, player, board);
+        if(depth > 1) {
+            moveSet.parallelStream().forEach((move) -> {
+                try {
+                    int score = moveScore(move, depth, player, board, numMoves);
+                    moveScores.put(move, score);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            for(Integer[] move : moveSet) {
+                int score = moveScore(move, depth, player, board, numMoves);
                 moveScores.put(move, score);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        });
-
-        /*for(Integer[] move : moveSet) {
-            int score = moveScore(move, depth, player, board);
-            moveScores.put(move, score);
-        }*/
+        }
 
         sortedMoves.addAll(moveScores.entrySet());
 
@@ -176,19 +183,21 @@ public class ChessAI {
     /* return the numerical score (higher is better) of the move moving        */
     /* 'piece' to space 'destPiece' where vulnerableAtSrc and vulnerableAtDst  */
     /* describe 'piece''s vulnerability and the respective locations           */
-    private int moveScore(Integer[] move, int depth, int player, Board board) throws Exception {
+    private int moveScore(Integer[] move, int depth, int player, Board board, int numMoves) throws Exception {
 
         /* make copy of board to analyze 'what if' we moved piece to destination */
         Board testBoard = new Board(board);
         testBoard.movePiece(move[0], move[1], move[2], move[3]);
 
+        int score = scoreBoard(testBoard, player) - scoreBoard(board, player);
+
         int reponseScore = 0;
 
-        if(--depth > 0) {
+        if(--depth > 0 && (numMoves < NUM_MOVES_THRESHOLD || score > PRUNING_SCORE)) {
             reponseScore = getOptimalMoveScore(depth, player^3, testBoard);
         }
 
-        return  scoreBoard(testBoard, player) - scoreBoard(board, player) - reponseScore;
+        return  score - reponseScore;
 
     }
 

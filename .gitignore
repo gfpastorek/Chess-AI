@@ -49,3 +49,7 @@ Temporary Items
 .idea/misc.xml
 *.xml
 out/production/Chess-AI/com/chess/ChessAI.class
+*.xml
+out/production/Chess-AI/com/chess/ChessAI$MoveComparator.class
+*.class
+*.xml

@@ -14,17 +14,6 @@ public class Main {
 
     /*
 
-
-        parallel through moveSet
-        Move took 1482 milliseconds
-        Move took 1560 milliseconds
-        Move took 2851 milliseconds
-        Move took 4527 milliseconds
-        Move took 4265 milliseconds
-        Move took 273 milliseconds
-        Move took 2746 milliseconds
-        Move took 3497 milliseconds
-
      */
     public static void main(String[] args) throws Exception {
         final Game game = new Game();
