@@ -2,6 +2,7 @@ package com.chess;
 
 import com.chess.pieces.PawnPiece;
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class ChessAI {
             case 0:
                 return getRandomMove();
             case 1:
-                return getShallowOptimalMove();
+                return getOptimalMove(1);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -61,18 +62,31 @@ public class ChessAI {
             }
         }
 
-        return null;
+        if(!board.isCheckmated(player)) {
+            System.out.println("the fuck?");
+        }
+
+        throw new InvalidStateException("No valid moves, but not checkmate!");
+
     }
 
 
 
     /* return the optimal move with lookahead of 1       */
     /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
-    private Integer[] getShallowOptimalMove() throws Exception {
+    private Integer[] getOptimalMove(int depth) throws Exception {
 
-        List<Integer[]> moveSet = getMoveSet();
+        return getOptimalMove(depth, player, board);
 
-        SortedSet sortedMoves = rankMoves(moveSet);
+    }
+
+    /* return the optimal move with lookahead of 1       */
+    /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
+    private Integer[] getOptimalMove(int depth, int player, Board board) throws Exception {
+
+        List<Integer[]> moveSet = getMoveSet(board.getPieces(player));
+
+        SortedSet sortedMoves = rankMoves(moveSet, depth, player, board);
 
         Map.Entry<Integer[], Integer> bestEntry = (Map.Entry<Integer[], Integer>) sortedMoves.first();
 
@@ -81,12 +95,12 @@ public class ChessAI {
     }
 
     /* return the list of all valid moves for this player */
-    private List<Integer[]> getMoveSet() throws Exception {
+    private List<Integer[]> getMoveSet(List<Piece> pieces_) throws Exception {
 
         List<Integer[]> moveSet = new ArrayList<Integer[]>();
 
         /* select a random (valid) move from a random piece */
-        for(Piece piece : pieces) {
+        for(Piece piece : pieces_) {
             moveSet.addAll(piece.validDestinationSet());
         }
 
@@ -98,14 +112,14 @@ public class ChessAI {
 
 
     /* rank moves from best to worst, look-ahead factor is 1 */
-    private SortedSet rankMoves(List<Integer[]> moveSet) throws Exception {
+    private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board) throws Exception {
 
         HashMap<Integer[], Integer> moveScores = new HashMap<Integer[], Integer>();
 
         SortedSet sortedMoves = new TreeSet<Map.Entry<Integer[], Integer>>(new MoveComparator());
 
         for(Integer[] move : moveSet) {
-            int score = moveScore(move);
+            int score = moveScore(move, depth, player, board);
             moveScores.put(move, score);
         }
 
@@ -126,11 +140,17 @@ public class ChessAI {
     /* return the numerical score (higher is better) of the move moving        */
     /* 'piece' to space 'destPiece' where vulnerableAtSrc and vulnerableAtDst  */
     /* describe 'piece''s vulnerability and the respective locations           */
-    private int moveScore(Integer[] move) throws Exception {
+    private int moveScore(Integer[] move, int depth, int player, Board board) throws Exception {
 
         /* make copy of board to analyze 'what if' we moved piece to destination */
         Board testBoard = new Board(board);
         testBoard.movePiece(move[0], move[1], move[2], move[3]);
+
+        while(depth > 0) {
+            player ^= 3;
+            Integer[] oppMove = getOptimalMove(--depth, player, testBoard);
+            testBoard.movePiece(oppMove[0], oppMove[1], oppMove[2], oppMove[3]);
+        }
 
         return  scoreBoard(testBoard) - scoreBoard(board);
 
@@ -165,10 +185,7 @@ public class ChessAI {
         for(Piece examinedPiece : board.getPieces(player)) {
             if(!examinedPiece.isCaptured()) {
                 score += 10*PieceRank.getRank(examinedPiece);
-                score += examinedPiece.validDestinationSet().size();
-                //if(board.canBeAttacked(examinedPiece)) {
-                //    score -= 5*PieceRank.getRank(examinedPiece);
-                //}
+                score += examinedPiece.validDestinationSet().size();  //TODO - optimize this, causing slowdown
                 if(examinedPiece.getClass() == PawnPiece.class) {
                     score -= 5*PieceRank.pawnIsDoubled((PawnPiece)examinedPiece, board);
                     score -= 5*PieceRank.pawnIsIsolated((PawnPiece)examinedPiece, board);
