@@ -18,6 +18,8 @@ public class Board {
     int board_x;
     int board_y;
 
+    int turn = 0;
+
     /* 2d array holding the board spaces */
     Piece spaces[][];
 
@@ -189,7 +191,14 @@ public class Board {
             promotePawn((PawnPiece)piece);
         }
 
+        turn++;
+
         return 0;
+    }
+
+    /* return the turn number */
+    public int getTurn() {
+        return turn;
     }
 
     /* promote a pawn piece to a queen, handles board replacement */

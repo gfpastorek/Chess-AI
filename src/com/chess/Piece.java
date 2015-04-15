@@ -14,12 +14,15 @@ public abstract class Piece {
     protected boolean captured;
     protected int loc_x, loc_y;
     protected boolean hasMoved;
+    private List<Integer[]> validMoveSet;
+    private int lastTurn;
 
     public Piece(Board parent, int player_){
         board = parent;
         player = player_;
         captured = false;
         hasMoved = false;
+        lastTurn = board.getTurn();
     }
 
     public Piece(Piece other, Board parent){
@@ -40,9 +43,18 @@ public abstract class Piece {
 
     protected abstract List<Integer[]> retrieveValidDestinationSet() throws Exception;
 
+    /* return the set of all valid moves */
     public List<Integer[]> validDestinationSet() throws Exception {
+
         if(!captured) {
-            return retrieveValidDestinationSet();
+
+            /* check if the set needs to be updated */
+            if(lastTurn != board.getTurn() || validMoveSet == null) {
+                validMoveSet = retrieveValidDestinationSet();
+            }
+            lastTurn = board.getTurn();
+            return validMoveSet;
+
         } else {
             return new ArrayList<Integer[]>();
         }

@@ -37,7 +37,7 @@ public class ChessAI {
             case 0:
                 return getRandomMove();
             case 1:
-                return getOptimalMove(1);
+                return getOptimalMove(2);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -141,14 +141,23 @@ public class ChessAI {
     /* rank moves from best to worst, look-ahead factor is 1 */
     private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board) throws Exception {
 
-        HashMap<Integer[], Integer> moveScores = new HashMap<Integer[], Integer>();
+        Map<Integer[], Integer> moveScores = Collections.synchronizedMap(new HashMap<Integer[], Integer>());
 
         SortedSet sortedMoves = new TreeSet<Map.Entry<Integer[], Integer>>(new MoveComparator());
 
-        for(Integer[] move : moveSet) {
+        moveSet.parallelStream().forEach((move) -> {
+            try {
+                int score = moveScore(move, depth, player, board);
+                moveScores.put(move, score);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        /*for(Integer[] move : moveSet) {
             int score = moveScore(move, depth, player, board);
             moveScores.put(move, score);
-        }
+        }*/
 
         sortedMoves.addAll(moveScores.entrySet());
 
@@ -175,8 +184,8 @@ public class ChessAI {
 
         int reponseScore = 0;
 
-        if(depth > 0) {
-            reponseScore = getOptimalMoveScore(--depth, player^3, testBoard);
+        if(--depth > 0) {
+            reponseScore = getOptimalMoveScore(depth, player^3, testBoard);
         }
 
         return  scoreBoard(testBoard, player) - scoreBoard(board, player) - reponseScore;
@@ -212,14 +221,13 @@ public class ChessAI {
         for(Piece examinedPiece : board.getPieces(player)) {
             if(!examinedPiece.isCaptured()) {
                 score += 10*PieceRank.getRank(examinedPiece);
-                score += examinedPiece.validDestinationSet().size();  //TODO - optimize this, causing slowdown
+                score += examinedPiece.validDestinationSet().size();
                 if(examinedPiece.getClass() == PawnPiece.class) {
                     score -= 5*PieceRank.pawnIsDoubled((PawnPiece)examinedPiece, board);
                     score -= 5*PieceRank.pawnIsIsolated((PawnPiece)examinedPiece, board);
                     score -= 5*PieceRank.pawnIsBlocked((PawnPiece)examinedPiece);
                 }
             }
-
         }
 
         return score;

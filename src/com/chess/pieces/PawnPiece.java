@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class PawnPiece extends Piece {
 
-
-
     public PawnPiece(Board parent, int player_){
         super(parent, player_);
     }
@@ -95,5 +93,6 @@ public class PawnPiece extends Piece {
         return validMoves;
 
     }
+
 
 }

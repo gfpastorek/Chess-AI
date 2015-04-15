@@ -12,13 +12,26 @@ import java.util.List;
  */
 public class Main {
 
-    //Score: 14 - 17 :::::::::: 0 vs 0
+    /*
+
+
+        parallel through moveSet
+        Move took 1482 milliseconds
+        Move took 1560 milliseconds
+        Move took 2851 milliseconds
+        Move took 4527 milliseconds
+        Move took 4265 milliseconds
+        Move took 273 milliseconds
+        Move took 2746 milliseconds
+        Move took 3497 milliseconds
+
+     */
     public static void main(String[] args) throws Exception {
         final Game game = new Game();
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(0, 0);
+        game.setAIDifficulty(1, 1);
 
         while(iterations-- > 0) {
 
@@ -30,7 +43,10 @@ public class Main {
 
             /* game is started, loop here */
             while (game.isRunning()) {
+                long t1 = System.currentTimeMillis();
                 game.makeMove();
+                long t2 = System.currentTimeMillis();
+                System.out.println("Move took " + (t2-t1) + " milliseconds");
                 boards.add(game.getBoard());
                 game.checkIfGameOver();
             }
