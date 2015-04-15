@@ -179,7 +179,7 @@ public class ChessAI {
             reponseScore = getOptimalMoveScore(--depth, player^3, testBoard);
         }
 
-        return  scoreBoard(testBoard) - scoreBoard(board) - reponseScore;
+        return  scoreBoard(testBoard, player) - scoreBoard(board, player) - reponseScore;
 
     }
 
@@ -199,13 +199,13 @@ public class ChessAI {
     D,S,I = doubled, blocked and isolated pawns
     M = Mobility (the number of legal moves)
     */
-    private int scoreBoard(Board board) throws Exception {
-        return scoreBoard(board, player) - scoreBoard(board, player ^ 3);
+    private int scoreBoard(Board board, int player) throws Exception {
+        return scoreBoardForPlayer(board, player) - scoreBoardForPlayer(board, player ^ 3);
     }
 
 
     /* give the score of the current board for player 'player' */
-    private int scoreBoard(Board board, int player) throws Exception {
+    private int scoreBoardForPlayer(Board board, int player) throws Exception {
 
         int score = 0;
 

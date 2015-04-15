@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="428e4b7a-7267-4c1d-aa69-6fadcc82c81c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI$MoveComparator.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI$MoveComparator.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/ChessAI.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/ChessAI.java" afterPath="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Game.java" afterPath="$PROJECT_DIR$/src/com/chess/Game.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Main.java" afterPath="$PROJECT_DIR$/src/com/chess/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -34,8 +35,8 @@
       <file leaf-file-name="ChessAI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/chess/ChessAI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.4040178" vertical-offset="2703" max-vertical-offset="3961">
-              <caret line="200" column="6" selection-start-line="200" selection-start-column="6" selection-end-line="200" selection-end-column="6" />
+            <state vertical-scroll-proportion="-0.70758927" vertical-offset="3207" max-vertical-offset="3961">
+              <caret line="174" column="0" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
               <folding>
                 <element signature="e#4136#4147#0" expanded="true" />
               </folding>
@@ -47,8 +48,10 @@
         <entry file="file://$PROJECT_DIR$/src/com/chess/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1173">
-              <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-              <folding />
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -66,16 +69,16 @@
       <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/chess/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4472" max-vertical-offset="6528">
-              <caret line="275" column="0" selection-start-line="275" selection-start-column="0" selection-end-line="275" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2244" max-vertical-offset="6528">
+              <caret line="147" column="54" selection-start-line="147" selection-start-column="54" selection-end-line="147" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1058#1059#0" expanded="true" />
                 <element signature="e#1086#1087#0" expanded="true" />
                 <element signature="e#1248#1249#0" expanded="true" />
                 <element signature="e#1282#1283#0" expanded="true" />
-                <element signature="e#4132#4133#0" expanded="true" />
-                <element signature="e#4162#4163#0" expanded="true" />
+                <element signature="e#4143#4144#0" expanded="true" />
+                <element signature="e#4173#4174#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -135,10 +138,10 @@
         <option value="$PROJECT_DIR$/src/ChessGUI/ChessGUI.java" />
         <option value="$PROJECT_DIR$/src/com/chess/Board.java" />
         <option value="$PROJECT_DIR$/src/com/chess/PieceRank.java" />
-        <option value="$PROJECT_DIR$/src/com/chess/Game.java" />
         <option value="$PROJECT_DIR$/src/ML/Main.java" />
-        <option value="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
+        <option value="$PROJECT_DIR$/src/com/chess/Game.java" />
         <option value="$PROJECT_DIR$/src/com/chess/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
       </list>
     </option>
   </component>
@@ -798,8 +801,8 @@
             <element signature="e#1086#1087#0" expanded="true" />
             <element signature="e#1248#1249#0" expanded="true" />
             <element signature="e#1282#1283#0" expanded="true" />
-            <element signature="e#4132#4133#0" expanded="true" />
-            <element signature="e#4162#4163#0" expanded="true" />
+            <element signature="e#4143#4144#0" expanded="true" />
+            <element signature="e#4173#4174#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -816,7 +819,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1173" max-vertical-offset="1700">
           <caret line="69" column="47" selection-start-line="69" selection-start-column="47" selection-end-line="69" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -886,8 +891,8 @@
             <element signature="e#1086#1087#0" expanded="true" />
             <element signature="e#1248#1249#0" expanded="true" />
             <element signature="e#1282#1283#0" expanded="true" />
-            <element signature="e#4132#4133#0" expanded="true" />
-            <element signature="e#4162#4163#0" expanded="true" />
+            <element signature="e#4143#4144#0" expanded="true" />
+            <element signature="e#4173#4174#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -904,7 +909,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="931" max-vertical-offset="1700">
           <caret line="69" column="47" selection-start-line="69" selection-start-column="47" selection-end-line="69" selection-end-column="47" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -981,8 +988,8 @@
             <element signature="e#1086#1087#0" expanded="true" />
             <element signature="e#1248#1249#0" expanded="true" />
             <element signature="e#1282#1283#0" expanded="true" />
-            <element signature="e#4132#4133#0" expanded="true" />
-            <element signature="e#4162#4163#0" expanded="true" />
+            <element signature="e#4143#4144#0" expanded="true" />
+            <element signature="e#4173#4174#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -991,7 +998,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="1241">
           <caret line="56" column="43" selection-start-line="56" selection-start-column="43" selection-end-line="56" selection-end-column="43" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1161,22 +1170,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/chess/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4472" max-vertical-offset="6528">
-          <caret line="275" column="0" selection-start-line="275" selection-start-column="0" selection-end-line="275" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1058#1059#0" expanded="true" />
-            <element signature="e#1086#1087#0" expanded="true" />
-            <element signature="e#1248#1249#0" expanded="true" />
-            <element signature="e#1282#1283#0" expanded="true" />
-            <element signature="e#4132#4133#0" expanded="true" />
-            <element signature="e#4162#4163#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/TreeMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="20251" max-vertical-offset="47277">
@@ -1185,18 +1178,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/chess/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2244" max-vertical-offset="6528">
+          <caret line="147" column="54" selection-start-line="147" selection-start-column="54" selection-end-line="147" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1058#1059#0" expanded="true" />
+            <element signature="e#1086#1087#0" expanded="true" />
+            <element signature="e#1248#1249#0" expanded="true" />
+            <element signature="e#1282#1283#0" expanded="true" />
+            <element signature="e#4143#4144#0" expanded="true" />
+            <element signature="e#4173#4174#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/chess/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1173">
-          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-          <folding />
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/chess/ChessAI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4040178" vertical-offset="2703" max-vertical-offset="3961">
-          <caret line="200" column="6" selection-start-line="200" selection-start-column="6" selection-end-line="200" selection-end-column="6" />
+        <state vertical-scroll-proportion="-0.70758927" vertical-offset="3207" max-vertical-offset="3961">
+          <caret line="174" column="0" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
           <folding>
             <element signature="e#4136#4147#0" expanded="true" />
           </folding>
