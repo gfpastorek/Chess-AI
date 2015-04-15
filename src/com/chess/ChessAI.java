@@ -150,6 +150,7 @@ public class ChessAI {
 
         SortedSet sortedMoves = new TreeSet<Map.Entry<Integer[], Integer>>(new MoveComparator());
 
+        /* compute score for each move, parallelize only at first depth */
         if(depth > 1) {
             moveSet.parallelStream().forEach((move) -> {
                 try {
@@ -166,6 +167,7 @@ public class ChessAI {
             }
         }
 
+        /* sorts the moves by score */
         sortedMoves.addAll(moveScores.entrySet());
 
         return sortedMoves;
