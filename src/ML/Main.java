@@ -16,18 +16,22 @@ public class Main {
     /*
 
      */
+    //greg
     public static void main(String[] args) throws Exception {
         final Game game = new Game();
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(3, 4);
+        game.setAIDifficulty(4, 4);
         int max_turns = 200;
 
 
         double[] playerSpeed = new double[2];
 
         while(iterations-- > 0) {
+
+            System.out.println("Starting game");
+
             int turn = 0;
             List<Board> boards = new LinkedList<Board>();
 
@@ -37,6 +41,7 @@ public class Main {
 
             /* game is started, loop here */
             while (game.isRunning()) {
+                //System.out.println("666");
                 if(turn >= max_turns) break;
                 turn++;
                 int player = game.getPlayerTurn();

@@ -64,10 +64,6 @@ public class QueenPiece extends Piece {
                 else if (space.getPlayer() == player){
                     return false;
                 }
-                /* return false if we try capturing a king */
-                else if (space.getClass() == KingPiece.class){
-                    return false;
-                }
             }
         }
 
@@ -76,19 +72,19 @@ public class QueenPiece extends Piece {
 
 
     /* retrieve the set of all valid moves for this piece as a tuple of [src_x, src_y, dst_x, dst_y] */
-    protected List<Integer[]> retrieveValidDestinationSet() throws Exception {
+    protected List<Integer[]> retrieveValidDestinationSet(boolean allowCheck) throws Exception {
 
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 
         for(int n = 1; n < 8; n++) {
-            addMoveIfValid(validMoves, loc_x + n, loc_y + n);
-            addMoveIfValid(validMoves, loc_x + n, loc_y - n);
-            addMoveIfValid(validMoves, loc_x - n, loc_y + n);
-            addMoveIfValid(validMoves, loc_x - n, loc_y - n);
-            addMoveIfValid(validMoves, loc_x + n, loc_y    );
-            addMoveIfValid(validMoves, loc_x - n, loc_y    );
-            addMoveIfValid(validMoves, loc_x,     loc_y + n);
-            addMoveIfValid(validMoves, loc_x,     loc_y - n);
+            addMoveIfValid(validMoves, loc_x + n, loc_y + n, allowCheck);
+            addMoveIfValid(validMoves, loc_x + n, loc_y - n, allowCheck);
+            addMoveIfValid(validMoves, loc_x - n, loc_y + n, allowCheck);
+            addMoveIfValid(validMoves, loc_x - n, loc_y - n, allowCheck);
+            addMoveIfValid(validMoves, loc_x + n, loc_y    , allowCheck);
+            addMoveIfValid(validMoves, loc_x - n, loc_y    , allowCheck);
+            addMoveIfValid(validMoves, loc_x,     loc_y + n, allowCheck);
+            addMoveIfValid(validMoves, loc_x,     loc_y - n, allowCheck);
         }
 
         return validMoves;

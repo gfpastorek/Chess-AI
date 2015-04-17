@@ -19,7 +19,7 @@ public class PieceRank {
         rankMap.put(BishopPiece.class, 3);
         rankMap.put(RookPiece.class, 5);
         rankMap.put(QueenPiece.class, 9);
-        rankMap.put(KingPiece.class, 200);
+        rankMap.put(KingPiece.class, 100000);
         initialized = true;
     }
 
@@ -80,7 +80,7 @@ public class PieceRank {
     /* check if a pawn is isolated, that is, there is no pawn on an adjacent column */
     public static int pawnIsBlocked(PawnPiece pawn) throws Exception {
 
-        if(pawn.validDestinationSet().size() == 0) {
+        if(pawn.validDestinationSet(false).size() == 0) {
             return 1;
         } else {
             return 0;

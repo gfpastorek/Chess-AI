@@ -19,6 +19,7 @@ public class ChessAI {
     final static int NUM_MOVES_THRESHOLD = 10;
     final static int PRUNING_SCORE = -1;
 
+    //greg
     public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) throws InvalidArgumentException {
         pieces = pieces_;
         board = board_;
@@ -44,9 +45,11 @@ public class ChessAI {
             case 2:
                 return getMoveFromMinimax(2);
             case 3:
-                return getOptimalMove(3);
-            case 4:
                 return getMoveFromMinimax(3);
+            case 4:
+                return getMoveFromMinimax(4);
+            case 5:
+                return getMoveFromMinimax(5);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -55,6 +58,7 @@ public class ChessAI {
 
     /* random return a valid move for the AI             */
     /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
+    //greg
     private Integer[] getRandomMove() throws Exception {
 
         /*  copy pieces list, shuffle order of pieces for random selection */
@@ -64,7 +68,7 @@ public class ChessAI {
         /* select a random (valid) move from a random piece */
         while(!potentialPieces.isEmpty()) {
             Piece piece = potentialPieces.remove(0);
-            List<Integer[]> moveSet = piece.validDestinationSet();
+            List<Integer[]> moveSet = piece.validDestinationSet(true);
             if(!moveSet.isEmpty()) {
                 Collections.shuffle(moveSet);
                 return moveSet.remove(0);
@@ -83,6 +87,7 @@ public class ChessAI {
 
     /* return the optimal move with lookahead of 1       */
     /* output is a tuple of [src_x, src_y, dst_x, dst_y] */
+    //greg
     private Integer[] getOptimalMove(int depth) throws Exception {
 
         return getOptimalMove(depth, player, board);
@@ -90,6 +95,7 @@ public class ChessAI {
 
     /* return the optimal move with lookahead of depth       */
     /* output is a tuple of [src_x, src_y, dst_x, dst_y]     */
+    //greg
     private Integer[] getOptimalMove(int depth, int player, Board board) throws Exception {
 
         Map.Entry<Integer[], Integer> bestEntry = getOptimalMoveEntry(depth, player, board);
@@ -99,6 +105,7 @@ public class ChessAI {
 
     /* return the optimal move score with lookahead of depth       */
     /* output is an integer                                        */
+    //greg
     private Integer getOptimalMoveScore(int depth, int player, Board board) throws Exception {
 
         Map.Entry<Integer[], Integer> bestEntry = getOptimalMoveEntry(depth, player, board);
@@ -114,6 +121,7 @@ public class ChessAI {
 
     /* get the optimal entry<move, score> with lookahead of depth */
     /* returns null if no move found, signaling checkmate         */
+    //greg
     private Map.Entry<Integer[], Integer> getOptimalMoveEntry(int depth, int player, Board board) throws Exception {
 
         List<Integer[]> moveSet = getMoveSet(board.getPieces(player), depth);
@@ -133,13 +141,14 @@ public class ChessAI {
     }
 
     /* return the list of all valid moves for this player */
+    //greg
     private List<Integer[]> getMoveSet(List<Piece> pieces_, int depth) throws Exception {
 
         List<Integer[]> moveSet = Collections.synchronizedList(new ArrayList<Integer[]>());
 
         /* select a random (valid) move from a random piece */
         for (Piece piece : pieces_) {
-            moveSet.addAll(piece.validDestinationSet());
+            moveSet.addAll(piece.validDestinationSet(false));
         }
 
         Collections.shuffle(moveSet);
@@ -148,13 +157,14 @@ public class ChessAI {
 
     }
 
+    //yuriy
     private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer) throws Exception {
         List<BoardAndMove> frontier= new ArrayList<BoardAndMove>();
         List<Piece> pieces_= startState.getPieces(currentPlayer);
         for (Piece piece : pieces_) {
             List<Integer[]> possibleMoves= new ArrayList<Integer[]>();
 
-            possibleMoves = piece.validDestinationSet();
+            possibleMoves = piece.validDestinationSet(false);
 
             for(Integer[] possibleMove: possibleMoves){
                 Board possibleState = startState;
@@ -168,6 +178,7 @@ public class ChessAI {
 
 
     /* rank moves from best to worst, look-ahead factor is 1 */
+    //greg
     private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board, int numMoves) throws Exception {
 
         Map<Integer[], Integer> moveScores = new HashMap<Integer[], Integer>();
@@ -187,6 +198,7 @@ public class ChessAI {
 
     }
 
+    //greg
     private class MoveComparator implements Comparator<Map.Entry<Integer[], Integer>> {
 
         @Override
@@ -198,6 +210,7 @@ public class ChessAI {
     /* return the numerical score (higher is better) of the move moving        */
     /* 'piece' to space 'destPiece' where vulnerableAtSrc and vulnerableAtDst  */
     /* describe 'piece''s vulnerability and the respective locations           */
+    //greg
     private int moveScore(Integer[] move, int depth, int player, Board board, int numMoves) throws Exception {
 
         /* make copy of board to analyze 'what if' we moved piece to destination */
@@ -232,12 +245,14 @@ public class ChessAI {
     D,S,I = doubled, blocked and isolated pawns
     M = Mobility (the number of legal moves)
     */
+    //greg
     private int scoreBoard(Board board, int player) throws Exception {
         return scoreBoardForPlayer(board, player) - scoreBoardForPlayer(board, player ^ 3);
     }
 
 
     /* give the score of the current board for player 'player' */
+    //greg
     private int scoreBoardForPlayer(Board board, int player) throws Exception {
 
         /* Heavily parallelized code for determining the score of a player */
@@ -249,12 +264,13 @@ public class ChessAI {
                 /* ignore capture pieces, for each piece add its contribution to score */
                 if (!examinedPiece.isCaptured()) {
                     int score = 0;
+                    int possible_moves = examinedPiece.validDestinationSet(true).size();
                     score += 10 * PieceRank.getRank(examinedPiece);
-                    score += examinedPiece.validDestinationSet().size();
+                    score += possible_moves;
                     if (examinedPiece.getClass() == PawnPiece.class) {
                         score -= 5 * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
                         score -= 5 * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
-                        score -= 5 * PieceRank.pawnIsBlocked((PawnPiece) examinedPiece);
+                        score -= 5 * ((possible_moves == 0) ? 1 : 0);
                     }
                     scores.add(score);
                 }
@@ -266,18 +282,15 @@ public class ChessAI {
         return sum(scores);
 
     }
-    private Integer[] getMoveFromMinimax(int depth){
+
+    //yuriy
+    private Integer[] getMoveFromMinimax(int depth) throws Exception {
         Integer [] bestMove= new Integer [4];
-        try {
-            MiniMax(board, depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            System.exit(0);
-        }
+        MiniMax(board, depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
         return bestMove;
     }
 
+    //yuriy
     private int MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, int alpha, int beta, Integer[] Move) throws Exception {
 
         // Switch the next action
@@ -362,6 +375,7 @@ public class ChessAI {
     }
 
 
+    //greg
     public Integer sum(List<Integer> list) {
         Integer sum= 0;
         for (Integer i:list)

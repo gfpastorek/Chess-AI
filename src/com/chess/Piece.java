@@ -41,16 +41,16 @@ public abstract class Piece {
 
     public abstract boolean isValidMove(int src_x, int src_y, int dest_x, int dest_y);
 
-    protected abstract List<Integer[]> retrieveValidDestinationSet() throws Exception;
+    protected abstract List<Integer[]> retrieveValidDestinationSet(boolean allowCheck) throws Exception;
 
     /* return the set of all valid moves */
-    public List<Integer[]> validDestinationSet() throws Exception {
+    public List<Integer[]> validDestinationSet(boolean allowCheck) throws Exception {
 
         if(!captured) {
 
             /* check if the set needs to be updated */
             if(lastTurn != board.getTurn() || validMoveSet == null) {
-                validMoveSet = retrieveValidDestinationSet();
+                validMoveSet = retrieveValidDestinationSet(allowCheck);
             }
             lastTurn = board.getTurn();
             return validMoveSet;
@@ -115,9 +115,9 @@ public abstract class Piece {
     }
 
     /* add a move n spaces in dir_x and dir_y to the validMoves set */
-    protected void addMoveIfValid(List<Integer[]> validMoves, int dst_x, int dst_y) throws Exception {
+    protected void addMoveIfValid(List<Integer[]> validMoves, int dst_x, int dst_y, boolean allowCheck) throws Exception {
         if(isValidMove(loc_x, loc_y, dst_x, dst_y)
-                && !board.causesCheck(this, dst_x, dst_y)) {
+                && (allowCheck || !board.causesCheck(this, dst_x, dst_y))) {
             validMoves.add(new Integer[]{loc_x, loc_y, dst_x, dst_y});
         }
     }

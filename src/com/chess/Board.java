@@ -84,9 +84,6 @@ public class Board {
         if(selectedClassicChess) {
             addPiecesForPlayer_ClassicMode(1);
             addPiecesForPlayer_ClassicMode(2);
-        } else {
-            addPiecesForPlayer_ChuckMode(1);
-            addPiecesForPlayer_ChuckMode(2);
         }
     }
 
@@ -116,30 +113,6 @@ public class Board {
     }
 
 
-    /* Initialize all the board pieces for given player using Chuck Norris configuration. */
-    /* Helper function for resetBoard.                                                   */
-    private void addPiecesForPlayer_ChuckMode(int player){
-
-        /* select first/second row indices based on player number */
-        int first_row = (player == 1) ? 0 : getMaxY()-1;
-        int second_row = (player == 1) ? 1 : getMaxY()-2;
-
-        /* add first row pieces to board for player*/
-        addPiece(new RookPiece(this, player), 0, first_row);
-        addPiece(new ChuckNorrisPiece(this, player), 1, first_row);
-        addPiece(new BishopPiece(this, player), 2, first_row);
-        addPiece(new KingPiece(this, player), 3, first_row);
-        addPiece(new KillerQueenPiece(this, player), 4, first_row);
-        addPiece(new BishopPiece(this, player), 5, first_row);
-        addPiece(new ChuckNorrisPiece(this, player), 6, first_row);
-        addPiece(new RookPiece(this, player), 7, first_row);
-
-        /* add pawns for player */
-        for(int loc_x = 0; loc_x < getMaxX(); loc_x++){
-            addPiece(new PawnPiece(this, player), loc_x, second_row);
-        }
-
-    }
 
     /* get board width */
     public int getMaxX(){
