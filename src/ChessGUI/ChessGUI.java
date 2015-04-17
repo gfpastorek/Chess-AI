@@ -109,9 +109,12 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
         private void setUpMenu(JFrame window) {
             JMenuBar menubar = new JMenuBar();
             JMenu options = new JMenu("Game");
-            JMenuItem newGame = new JMenuItem("New Game against AI");
+            JMenuItem newGame = new JMenuItem("New Game against easy AI");
             newGame.addActionListener(this);
             options.add(newGame);
+            JMenuItem newMediumGame = new JMenuItem("New Game against medium AI");
+            newMediumGame.addActionListener(this);
+            options.add(newMediumGame);
             JMenuItem newPlayer = new JMenuItem("New Game against Player");
             newPlayer.addActionListener(this);
             options.add(newPlayer);
@@ -159,9 +162,13 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
                 if (e.getActionCommand()=="Undo"){
                     curGame.undoTrigger();
                 }
-                else if (e.getActionCommand()=="New Game against AI"){
+                else if (e.getActionCommand()=="New Game against easy AI"){
                     gameRunning=true;
                     curGame.newGame(1);
+                }
+                else if (e.getActionCommand()=="New Game against medium AI"){
+                    gameRunning=true;
+                    curGame.newGame(4);
                 }
                 else if (e.getActionCommand()=="New Game against Player"){
                     gameRunning=true;

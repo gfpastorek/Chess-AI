@@ -158,6 +158,11 @@ public class Game {
                 playerIsAI[1] = true;
                 aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces);
                 break;
+            case 4:
+                playerIsAI[0]=true;
+                aiPlayers[0]= new ChessAI(2, board, board.player1Pieces);
+                playerIsAI[1]=false;
+                break;
         }
     }
 
@@ -249,6 +254,9 @@ public class Game {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public int getPlayerTurn(){
+        return player_turn;
     }
 
 
