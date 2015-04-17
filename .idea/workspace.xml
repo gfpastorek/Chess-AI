@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="428e4b7a-7267-4c1d-aa69-6fadcc82c81c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ChessGUI/ChessGUI.java" afterPath="$PROJECT_DIR$/src/ChessGUI/ChessGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Game.java" afterPath="$PROJECT_DIR$/src/com/chess/Game.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/ChessGUI/ChessGUI.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/ChessGUI/ChessGUI.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game$SpaceClickListener.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game$SpaceClickListener.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Chess-AI.iws" />
@@ -974,7 +975,13 @@
       <option name="project" value="LOCAL" />
       <updated>1429255061862</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;out/production/Chess-AI/com/chess/ChessAI.class&#10;&#9;out/production/Chess-AI/com/chess/Game$StartClickListener.class&#10;&#9;src/com/chess/Game.java&#10;">
+      <created>1429255693251</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1429255693251</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
