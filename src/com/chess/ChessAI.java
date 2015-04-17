@@ -10,20 +10,7 @@ import java.util.*;
  * Created by Greg Pastorek on 4/8/2015.
  */
 public class ChessAI {
-    private class BoardAndMove{
-        private Board board;
-        private Integer [] move;
-        public BoardAndMove(Board new_board,Integer[] new_move){
-            board= new_board;
-            move= new_move;
-        }
-        public Board getBoard(){
-            return board;
-        }
-        public Integer[] getMove(){
-            return move;
-        }
-    }
+
     private ArrayList<Piece> pieces;
     private int difficulty;
     private Board board;
@@ -56,6 +43,10 @@ public class ChessAI {
                 return getOptimalMove(2);
             case 2:
                 return getMoveFromMinimax(2);
+            case 3:
+                return getOptimalMove(3);
+            case 4:
+                return getMoveFromMinimax(3);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -157,29 +148,18 @@ public class ChessAI {
 
     }
 
-    private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer){
+    private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer) throws Exception {
         List<BoardAndMove> frontier= new ArrayList<BoardAndMove>();
         List<Piece> pieces_= startState.getPieces(currentPlayer);
         for (Piece piece : pieces_) {
             List<Integer[]> possibleMoves= new ArrayList<Integer[]>();
-            try {
-                possibleMoves = piece.validDestinationSet();
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-                System.exit(0);
-            }
+
+            possibleMoves = piece.validDestinationSet();
 
             for(Integer[] possibleMove: possibleMoves){
-                Board possibleState= startState;
-                try {
-                    possibleState = new Board(startState);
-                    possibleState.movePiece(possibleMove[0], possibleMove[1], possibleMove[2], possibleMove[3]);
-                }
-                catch (Exception e){
-                    System.out.println(e.getMessage());
-                    System.exit(1);
-                }
+                Board possibleState = startState;
+                possibleState = new Board(startState);
+                possibleState.movePiece(possibleMove[0], possibleMove[1], possibleMove[2], possibleMove[3]);
                 frontier.add(new BoardAndMove(possibleState,possibleMove));
             }
         }
@@ -190,25 +170,14 @@ public class ChessAI {
     /* rank moves from best to worst, look-ahead factor is 1 */
     private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board, int numMoves) throws Exception {
 
-        Map<Integer[], Integer> moveScores = Collections.synchronizedMap(new HashMap<Integer[], Integer>());
+        Map<Integer[], Integer> moveScores = new HashMap<Integer[], Integer>();
 
         SortedSet sortedMoves = new TreeSet<Map.Entry<Integer[], Integer>>(new MoveComparator());
 
-        /* compute score for each move, parallelize only at first depth */
-        if(depth > 1) {
-            moveSet.parallelStream().forEach((move) -> {
-                try {
-                    int score = moveScore(move, depth, player, board, numMoves);
-                    moveScores.put(move, score);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        } else {
-            for(Integer[] move : moveSet) {
-                int score = moveScore(move, depth, player, board, numMoves);
-                moveScores.put(move, score);
-            }
+        /* compute score for each move */
+        for(Integer[] move : moveSet) {
+            int score = moveScore(move, depth, player, board, numMoves);
+            moveScores.put(move, score);
         }
 
         /* sorts the moves by score */
@@ -270,31 +239,31 @@ public class ChessAI {
 
     /* give the score of the current board for player 'player' */
     private int scoreBoardForPlayer(Board board, int player) throws Exception {
-    /* Heavily parallelized code for determining the score of a player */
-        List<Piece> pieces= board.getPieces(player);
-        List Scores = Collections.synchronizedList(new ArrayList<Integer>());
-                pieces.parallelStream().forEach((examinedPiece) -> {
-                    try {
-                        if (!examinedPiece.isCaptured()) {
-                            int score = 0;
-                            score += 10 * PieceRank.getRank(examinedPiece);
-                            score += examinedPiece.validDestinationSet().size();
-                            if (examinedPiece.getClass() == PawnPiece.class) {
-                                score -= 5 * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
-                                score -= 5 * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
-                                score -= 5 * PieceRank.pawnIsBlocked((PawnPiece) examinedPiece);
-                            }
-                            Scores.add(score);
-                        }
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+
+        /* Heavily parallelized code for determining the score of a player */
+        List<Piece> pieces = board.getPieces(player);
+        List<Integer> scores = Collections.synchronizedList(new ArrayList<Integer>());
+
+        pieces.parallelStream().forEach((examinedPiece) -> {
+            try {
+                /* ignore capture pieces, for each piece add its contribution to score */
+                if (!examinedPiece.isCaptured()) {
+                    int score = 0;
+                    score += 10 * PieceRank.getRank(examinedPiece);
+                    score += examinedPiece.validDestinationSet().size();
+                    if (examinedPiece.getClass() == PawnPiece.class) {
+                        score -= 5 * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
+                        score -= 5 * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
+                        score -= 5 * PieceRank.pawnIsBlocked((PawnPiece) examinedPiece);
                     }
-                });
-        int sum=0;
-        for (int i=0; i<Scores.size();i++){
-            sum+=(Integer)Scores.get(i);
-        }
-        return sum;
+                    scores.add(score);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
+        return sum(scores);
 
     }
     private Integer[] getMoveFromMinimax(int depth){
@@ -308,33 +277,30 @@ public class ChessAI {
         }
         return bestMove;
     }
-    private int MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, int alpha, int beta, Integer[] Move){
+
+    private int MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, int alpha, int beta, Integer[] Move) throws Exception {
 
         // Switch the next action
         int nextAction=1;
         if (Maximizing==1) {
             nextAction = 0;
         }
+
         //Switch the next Player
         int playerNode=currentPlayer^3;
         if (Maximizing==1){
             playerNode=currentPlayer;
         }
-        Board currentState= boardState;
-        try {
-            currentState = new Board(boardState);
-        }
-        catch (Exception e){
 
-        }
+        Board currentState = new Board(boardState);
+
         if (depth == 0 || currentState.checkEndState()) {
             //if we are at a leaf, we return the heuristic value
             try {
                 return scoreBoard(currentState, currentPlayer);
             } catch (Exception e) {
-
+                return 0;
             }
-            return 0;
         }
         int bestValue;
         //otherwise we generate a frontier
@@ -380,6 +346,28 @@ public class ChessAI {
         return bestValue;
     }
 
+    private class BoardAndMove{
+        private Board board;
+        private Integer [] move;
+        public BoardAndMove(Board new_board,Integer[] new_move){
+            board= new_board;
+            move= new_move;
+        }
+        public Board getBoard(){
+            return board;
+        }
+        public Integer[] getMove(){
+            return move;
+        }
+    }
+
+
+    public Integer sum(List<Integer> list) {
+        Integer sum= 0;
+        for (Integer i:list)
+            sum = sum + i;
+        return sum;
+    }
 
 
 }

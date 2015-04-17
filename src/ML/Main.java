@@ -21,7 +21,7 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(1, 1);
+        game.setAIDifficulty(3, 4);
         int max_turns = 200;
 
 
