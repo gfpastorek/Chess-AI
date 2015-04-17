@@ -221,7 +221,6 @@ public class Board {
     public List<Piece> getPieces(int player) {
         return (player == 1) ? player1Pieces : player2Pieces;
     }
-
     /* Gets piece at given location.  Returns null if out of bounds or no piece is there. */
     public Piece getPiece(int loc_x, int loc_y){
 
@@ -527,6 +526,16 @@ public class Board {
         else{
             Castle2=true;
         }
+    }
+    public boolean checkEndState(){
+        Boolean endState= false;
+        try {
+            endState= this.isDraw() || this.isCheckmated(1) || this.isCheckmated(2);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return endState;
     }
 
 }

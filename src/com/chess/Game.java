@@ -250,6 +250,9 @@ public class Game {
             e.printStackTrace();
         }
     }
+    public int getPlayerTurn(){
+        return player_turn;
+    }
 
 
     /* make a move using the AI system for player 'player' */

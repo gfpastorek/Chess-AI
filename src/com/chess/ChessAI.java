@@ -10,7 +10,20 @@ import java.util.*;
  * Created by Greg Pastorek on 4/8/2015.
  */
 public class ChessAI {
-
+    private class BoardAndMove{
+        private Board board;
+        private Integer [] move;
+        public BoardAndMove(Board new_board,Integer[] new_move){
+            board= new_board;
+            move= new_move;
+        }
+        public Board getBoard(){
+            return board;
+        }
+        public Integer[] getMove(){
+            return move;
+        }
+    }
     private ArrayList<Piece> pieces;
     private int difficulty;
     private Board board;
@@ -41,6 +54,8 @@ public class ChessAI {
                 return getRandomMove();
             case 1:
                 return getOptimalMove(2);
+            case 2:
+                return getMoveFromMinimax(2);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -142,6 +157,35 @@ public class ChessAI {
 
     }
 
+    private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer){
+        List<BoardAndMove> frontier= new ArrayList<BoardAndMove>();
+        List<Piece> pieces_= startState.getPieces(currentPlayer);
+        for (Piece piece : pieces_) {
+            List<Integer[]> possibleMoves= new ArrayList<Integer[]>();
+            try {
+                possibleMoves = piece.validDestinationSet();
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+                System.exit(0);
+            }
+
+            for(Integer[] possibleMove: possibleMoves){
+                Board possibleState= startState;
+                try {
+                    possibleState = new Board(startState);
+                    possibleState.movePiece(possibleMove[0], possibleMove[1], possibleMove[2], possibleMove[3]);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                    System.exit(1);
+                }
+                frontier.add(new BoardAndMove(possibleState,possibleMove));
+            }
+        }
+        return frontier;
+    }
+
 
     /* rank moves from best to worst, look-ahead factor is 1 */
     private SortedSet rankMoves(List<Integer[]> moveSet, int depth, int player, Board board, int numMoves) throws Exception {
@@ -226,23 +270,114 @@ public class ChessAI {
 
     /* give the score of the current board for player 'player' */
     private int scoreBoardForPlayer(Board board, int player) throws Exception {
+    /* Heavily parallelized code for determining the score of a player */
+        List<Piece> pieces= board.getPieces(player);
+        List Scores = Collections.synchronizedList(new ArrayList<Integer>());
+                pieces.parallelStream().forEach((examinedPiece) -> {
+                    try {
+                        if (!examinedPiece.isCaptured()) {
+                            int score = 0;
+                            score += 10 * PieceRank.getRank(examinedPiece);
+                            score += examinedPiece.validDestinationSet().size();
+                            if (examinedPiece.getClass() == PawnPiece.class) {
+                                score -= 5 * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
+                                score -= 5 * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
+                                score -= 5 * PieceRank.pawnIsBlocked((PawnPiece) examinedPiece);
+                            }
+                            Scores.add(score);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                });
+        int sum=0;
+        for (int i=0; i<Scores.size();i++){
+            sum+=(Integer)Scores.get(i);
+        }
+        return sum;
 
-        int score = 0;
+    }
+    private Integer[] getMoveFromMinimax(int depth){
+        Integer [] bestMove= new Integer [4];
+        try {
+            MiniMax(board, depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+        return bestMove;
+    }
+    private int MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, int alpha, int beta, Integer[] Move){
 
-        for(Piece examinedPiece : board.getPieces(player)) {
-            if(!examinedPiece.isCaptured()) {
-                score += 10*PieceRank.getRank(examinedPiece);
-                score += examinedPiece.validDestinationSet().size();
-                if(examinedPiece.getClass() == PawnPiece.class) {
-                    score -= 5*PieceRank.pawnIsDoubled((PawnPiece)examinedPiece, board);
-                    score -= 5*PieceRank.pawnIsIsolated((PawnPiece)examinedPiece, board);
-                    score -= 5*PieceRank.pawnIsBlocked((PawnPiece)examinedPiece);
+        // Switch the next action
+        int nextAction=1;
+        if (Maximizing==1) {
+            nextAction = 0;
+        }
+        //Switch the next Player
+        int playerNode=currentPlayer^3;
+        if (Maximizing==1){
+            playerNode=currentPlayer;
+        }
+        Board currentState= boardState;
+        try {
+            currentState = new Board(boardState);
+        }
+        catch (Exception e){
+
+        }
+        if (depth == 0 || currentState.checkEndState()) {
+            //if we are at a leaf, we return the heuristic value
+            try {
+                return scoreBoard(currentState, currentPlayer);
+            } catch (Exception e) {
+
+            }
+            return 0;
+        }
+        int bestValue;
+        //otherwise we generate a frontier
+        List<BoardAndMove> futureStates= generateFrontier(currentState, playerNode);
+        if (Maximizing==1) {
+            bestValue = -Integer.MAX_VALUE;
+            for (BoardAndMove state : futureStates) {
+                int attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction, currentPlayer, alpha, beta, new Integer[4]);
+                if (attemptValue > bestValue) {
+                    //if its better than the value we have so far, we update it
+                    Integer[] bestMove= state.getMove();
+                    Move[0]=bestMove[0];
+                    Move[1]=bestMove[1];
+                    Move[2]=bestMove[2];
+                    Move[3]=bestMove[3];
+                    bestValue = attemptValue;
+                }
+                alpha= Math.max(alpha, bestValue);
+                if (beta<=alpha) {
+                    break;
                 }
             }
         }
-
-        return score;
-
+        else {
+            bestValue = Integer.MAX_VALUE;
+            for (BoardAndMove state : futureStates) {
+                int attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction,currentPlayer,alpha, beta,  new Integer[4]);
+                if (attemptValue < bestValue) {
+                    //if its worse than the value we have so far, we update it
+                    Integer[] bestMove= state.getMove();
+                    Move[0]=bestMove[0];
+                    Move[1]=bestMove[1];
+                    Move[2]=bestMove[2];
+                    Move[3]=bestMove[3];
+                    bestValue = attemptValue;
+                }
+                beta = Math.min(beta, bestValue);
+                if (beta<=alpha) {
+                    break;
+                }
+            }
+        }
+        return bestValue;
     }
 
 
