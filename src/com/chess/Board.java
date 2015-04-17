@@ -18,6 +18,8 @@ public class Board {
     int board_x;
     int board_y;
 
+    int turn = 0;
+
     /* 2d array holding the board spaces */
     Piece spaces[][];
 
@@ -189,7 +191,14 @@ public class Board {
             promotePawn((PawnPiece)piece);
         }
 
+        turn++;
+
         return 0;
+    }
+
+    /* return the turn number */
+    public int getTurn() {
+        return turn;
     }
 
     /* promote a pawn piece to a queen, handles board replacement */
@@ -209,7 +218,7 @@ public class Board {
 
     /* get the list of pieces for player 'player' */
     /* returns a List<Piece> type                 */
-    private List<Piece> getPieces(int player) {
+    public List<Piece> getPieces(int player) {
         return (player == 1) ? player1Pieces : player2Pieces;
     }
 
@@ -308,6 +317,10 @@ public class Board {
             return false;
         }
 
+        if(piece.isCaptured()){
+            return false;
+        }
+
         /* get the dummy version of 'piece' */
         int src_x = piece.getLocX();
         int src_y = piece.getLocY();
@@ -326,9 +339,6 @@ public class Board {
             copyBoard.spaces[dest_x][dest_y] = copyPiece;
             copyPiece.setLocation(dest_x, dest_y);
         }
-
-        /* copy the board before we remove the king, for deeper recursions */
-        //Board nextBoard = new Board(copyBoard);
 
         /* get appropriate king piece and its coordinates */
         int king_x, king_y;
@@ -364,6 +374,7 @@ public class Board {
                 continue;
             }
 
+            /* copy the board before we remove the king, for deeper recursions */
             Board nextBoard = new Board(copyBoard);
 
             if(nextBoard.getPlayerKing(1) == null) {

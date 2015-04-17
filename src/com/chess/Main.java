@@ -10,12 +10,14 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, InvalidArgumentException {
+    public static void main(String[] args) throws Exception {
 
         final Game game = new Game();
         final ChessGUI curGui= new ChessGUI();
         curGui.setModel(game);
         game.setGUI(curGui);
+
+        game.setAIDifficulty(1, 0);
 
         curGui.launchGUI();
         game.offset= curGui.getOffset();
@@ -40,23 +42,18 @@ public class Main {
                         } catch(InterruptedException e) {}
                     }
 
-                    /* game is started, loop here */
-                    while(game.isRunning()){
-                        boolean gameOver=false;
-                        try{
-                            gameOver= game.checkIfGameOver();
-                        }
-                        catch (Exception e){
-
-                        }
-                        if (!gameOver) {
-                            try {
+                    try {
+                        /* game is started, loop here */
+                        while (game.isRunning()) {
+                            boolean gameOver = false;
+                            gameOver = game.checkIfGameOver();
+                            if (!gameOver) {
                                 Thread.sleep(10);
                                 game.makeMove();
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }

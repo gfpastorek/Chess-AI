@@ -8,6 +8,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import com.chess.*;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 
 /**
@@ -154,29 +155,33 @@ import com.chess.*;
         }
 
         public void actionPerformed(ActionEvent e) {
-            if (e.getActionCommand()=="Undo"){
-                curGame.undoTrigger();
-            }
-            else if (e.getActionCommand()=="New Game against AI"){
-                gameRunning=true;
-                curGame.newGame(1);
-            }
-            else if (e.getActionCommand()=="New Game against Player"){
-                gameRunning=true;
-                curGame.newGame(2);
-            }
-            else if (e.getActionCommand()=="Watch AI dance"){
-                gameRunning=true;
-                curGame.newGame(3);
-            }
-            else if (e.getActionCommand()=="New Custom"){
-                //curGame.newCustom();
-            }
-            else if (e.getActionCommand()=="Get Score"){
-                int player_one_score= curGame.getPlayerScore(1);
-                int player_two_score= curGame.getPlayerScore(2);
-                String curScore= p1_name+": "+Integer.toString(player_one_score)+" "+p2_name+": "+Integer.toString(player_two_score);
-                JOptionPane.showMessageDialog(null,curScore,"Current Score",JOptionPane.WARNING_MESSAGE);
+            try {
+                if (e.getActionCommand()=="Undo"){
+                    curGame.undoTrigger();
+                }
+                else if (e.getActionCommand()=="New Game against AI"){
+                    gameRunning=true;
+                    curGame.newGame(1);
+                }
+                else if (e.getActionCommand()=="New Game against Player"){
+                    gameRunning=true;
+                    curGame.newGame(2);
+                }
+                else if (e.getActionCommand()=="Watch AI dance"){
+                    gameRunning=true;
+                    curGame.newGame(3);
+                }
+                else if (e.getActionCommand()=="New Custom"){
+                    //curGame.newCustom();
+                }
+                else if (e.getActionCommand()=="Get Score"){
+                    int player_one_score= curGame.getPlayerScore(1);
+                    int player_two_score= curGame.getPlayerScore(2);
+                    String curScore= p1_name+": "+Integer.toString(player_one_score)+" "+p2_name+": "+Integer.toString(player_two_score);
+                    JOptionPane.showMessageDialog(null,curScore,"Current Score",JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (InvalidArgumentException e1) {
+                e1.printStackTrace();
             }
         }
         public void setPlayerNames(String player_one, String player_two){

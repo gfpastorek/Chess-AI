@@ -38,10 +38,19 @@ public class Game {
     int highlighted_x, highlighted_y;
     boolean space_selected;
 
+    int last_winner = -1;
+
+    int p1Difficulty = 1;
+    int p2Difficulty = 1;
+
     Board previousBoard = null;
 
     public Game() {
 
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     public void setGUI(ChessGUI gui_){
@@ -52,6 +61,15 @@ public class Game {
         frame = f;
     }
 
+    public int getLastWinner() {
+        return last_winner;
+    }
+
+    public void setAIDifficulty(int p1Difficulty_, int p2Difficulty_) {
+        p1Difficulty = p1Difficulty_;
+        p2Difficulty = p2Difficulty_;
+    }
+
     /* check if any game ending conditions are met, and handle them appropriately */
     public boolean checkIfGameOver() throws Exception {
 
@@ -60,21 +78,25 @@ public class Game {
         }
 
         if (board.isDraw()) {
-            //gui.setStatusbar("Draw!");
-            JOptionPane.showMessageDialog(frame, "Draw!");
-            gui.gameOver();
+            if(gui != null) {
+                gui.gameOver();
+                //gui.setStatusbar("Draw!");
+                JOptionPane.showMessageDialog(frame, "Draw!");
+            }
             running=false;
             return true;
         }
         else if(board.isCheckmated(1)){
             giveVictory(2);
-            gui.gameOver();
+            if(gui != null)
+                gui.gameOver();
             running=false;
             return true;
         }
         else if (board.isCheckmated(2)) {
             giveVictory(1);
-            gui.gameOver();
+            if(gui != null)
+                gui.gameOver();
             running=false;
             return true;
         }
@@ -89,13 +111,17 @@ public class Game {
         } else {
             player2Score++;
         }
-        //gui.setScore(player1Score, player2Score);
-        //gui.setStatusbar(playerName[player-1] + " wins!");
-        JOptionPane.showMessageDialog(frame, playerName[player-1] + " wins!");
+        last_winner = player;
+
+        if(gui != null) {
+            //gui.setScore(player1Score, player2Score);
+            //gui.setStatusbar(playerName[player-1] + " wins!");
+            JOptionPane.showMessageDialog(frame, playerName[player - 1] + " wins!");
+        }
     }
 
     /* clear game, wait for user to click 'start' */
-    public void newGame(int type){
+    public void newGame(int type) throws InvalidArgumentException {
         /*if(running){
             if(!(promptUserForRestart(1) && promptUserForRestart(2))){
                 return;
@@ -104,16 +130,22 @@ public class Game {
 
         board = new Board(8,8);
         board.resetBoard(true);
-        gui.updatePieces(board);
+
+        if(gui != null)
+            gui.updatePieces(board);
+
         running = true;
         player_turn=1;
-        gui.updatePieces(board);
+
+        if(gui != null)
+            gui.updatePieces(board);
+
         //gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
         //TODO - refactor segment below into it's own method
         switch(type) {
             case 1:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces);
                 playerIsAI[1]=false;
                 break;
             case 2:
@@ -122,9 +154,9 @@ public class Game {
                 break;
             case 3:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(0, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces);
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(0, board, board.player2Pieces);
+                aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces);
                 break;
         }
     }
@@ -207,21 +239,15 @@ public class Game {
         }
     }
     public void makeMove(){
-        if(playerIsAI[player_turn-1]){
-            try {
+        try {
+            if (playerIsAI[player_turn - 1]) {
                 pollAI();
-            }
-            catch (Exception e){
-
-            }
-        }
-        else{
-            try {
+            } else {
                 Thread.sleep(50);
             }
-            catch (Exception e){
-
-            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -256,7 +282,8 @@ public class Game {
         //gui.setUndoButtonEnabled(true);
 
         /* make the move by activating the GUI */
-        gui.updatePieces(board);
+        if(gui != null)
+            gui.updatePieces(board);
 
     }
     public boolean moveReceiver(int [] possibleMove){
