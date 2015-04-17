@@ -41,6 +41,8 @@ public class ChessAI {
                 return getRandomMove();
             case 1:
                 return getOptimalMove(2);
+            case 2:
+                return getOptimalMove(3);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }
@@ -193,7 +195,7 @@ public class ChessAI {
 
         int score = scoreBoard(testBoard, player) - scoreBoard(board, player);
 
-        int reponseScore = 0;
+        int reponseScore = 5;
 
         if(--depth > 0 && (numMoves < NUM_MOVES_THRESHOLD || score > PRUNING_SCORE)) {
             reponseScore = getOptimalMoveScore(depth, player^3, testBoard);

@@ -20,7 +20,7 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(1, 1);
+        game.setAIDifficulty(1, 2);
 
         while(iterations-- > 0) {
 
