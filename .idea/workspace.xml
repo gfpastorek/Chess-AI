@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="428e4b7a-7267-4c1d-aa69-6fadcc82c81c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="C:\Users\Yuriy\IdeaProjects\ChessAINew\out\production\Chess-AI\com\chess\ChessAI$MoveComparator.class" afterPath="C:\Users\Yuriy\IdeaProjects\ChessAINew\out\production\Chess-AI\com\chess\ChessAI$MoveComparator.class" />
-      <change type="MODIFICATION" beforePath="C:\Users\Yuriy\IdeaProjects\ChessAINew\out\production\Chess-AI\com\chess\ChessAI.class" afterPath="C:\Users\Yuriy\IdeaProjects\ChessAINew\out\production\Chess-AI\com\chess\ChessAI.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/tests/ChessAITest.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/tests/ChessAITest.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/ChessGUI/ChessGUI.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/ChessGUI/ChessGUI.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main$1.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Board.java" afterPath="$PROJECT_DIR$/src/com/chess/Board.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/ChessAI.java" afterPath="$PROJECT_DIR$/src/com/chess/ChessAI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tests/ChessAITest.java" afterPath="$PROJECT_DIR$/src/tests/ChessAITest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Game.java" afterPath="$PROJECT_DIR$/src/com/chess/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ML/Main.java" afterPath="$PROJECT_DIR$/src/ML/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/chess/Main.java" afterPath="$PROJECT_DIR$/src/com/chess/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Board.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Board.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Game.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/ML/Main.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/ML/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" afterPath="$PROJECT_DIR$/out/production/Chess-AI/com/chess/Main.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Chess-AI.iws" />
@@ -47,7 +39,7 @@
       <file leaf-file-name="ChessAI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/chess/ChessAI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.3448277" vertical-offset="5678" max-vertical-offset="6647">
+            <state vertical-scroll-proportion="0.0" vertical-offset="5678" max-vertical-offset="6647">
               <caret line="338" column="22" selection-start-line="338" selection-start-column="22" selection-end-line="338" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -55,8 +47,6 @@
                 <element signature="e#557#558#0" expanded="true" />
                 <element signature="e#593#594#0" expanded="true" />
                 <element signature="e#628#629#0" expanded="true" />
-                <element signature="e#5153#5167#0" expanded="true" />
-                <element signature="e#5331#5342#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,11 +55,9 @@
       <file leaf-file-name="ChessAITest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tests/ChessAITest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.15925059" vertical-offset="0" max-vertical-offset="1734">
-              <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-              <folding>
-                <element signature="e#3078#3085#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="-1.8665105" vertical-offset="1052" max-vertical-offset="1734">
+              <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -157,7 +145,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ML/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-42.793102" vertical-offset="0" max-vertical-offset="1564">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1241" max-vertical-offset="1564">
               <caret line="73" column="13" selection-start-line="71" selection-start-column="29" selection-end-line="73" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -775,7 +763,13 @@
       <option name="project" value="LOCAL" />
       <updated>1428644007256</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Merge remote-tracking branch 'origin/master'&#10;&#10;Conflicts:&#10;&#9;out/production/Chess-AI/com/chess/ChessAI.class&#10;&#9;out/production/Chess-AI/com/chess/Game$StartClickListener.class&#10;&#9;src/com/chess/Game.java&#10;">
+      <created>1429254977686</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1429254977686</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -785,15 +779,13 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3253521" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35915494" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32957748" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35915494" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35915494" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25670242" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -804,8 +796,10 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3887324" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3253521" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297587" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -884,7 +878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="4012">
           <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -894,6 +887,8 @@
           <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5365#5366#0" expanded="true" />
+            <element signature="e#5395#5396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -922,7 +917,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="1020">
           <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -956,8 +950,6 @@
             <element signature="e#557#558#0" expanded="true" />
             <element signature="e#593#594#0" expanded="true" />
             <element signature="e#628#629#0" expanded="true" />
-            <element signature="e#5153#5167#0" expanded="true" />
-            <element signature="e#5331#5342#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -966,9 +958,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="980" max-vertical-offset="1428">
           <caret line="63" column="38" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
-          <folding>
-            <element signature="e#1983#1990#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -976,7 +966,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="4012">
           <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -986,6 +975,8 @@
           <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5365#5366#0" expanded="true" />
+            <element signature="e#5395#5396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1014,7 +1005,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1122">
           <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1048,8 +1038,6 @@
             <element signature="e#557#558#0" expanded="true" />
             <element signature="e#593#594#0" expanded="true" />
             <element signature="e#628#629#0" expanded="true" />
-            <element signature="e#5153#5167#0" expanded="true" />
-            <element signature="e#5331#5342#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1058,9 +1046,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="1428">
           <caret line="74" column="58" selection-start-line="74" selection-start-column="58" selection-end-line="74" selection-end-column="58" />
-          <folding>
-            <element signature="e#1983#1990#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1068,7 +1054,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3545" max-vertical-offset="4012">
           <caret line="181" column="41" selection-start-line="181" selection-start-column="41" selection-end-line="181" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1078,6 +1063,8 @@
           <caret line="436" column="0" selection-start-line="436" selection-start-column="0" selection-end-line="436" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#5365#5366#0" expanded="true" />
+            <element signature="e#5395#5396#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1193,7 +1180,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1122">
           <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1218,7 +1204,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="4012">
           <caret line="25" column="66" selection-start-line="25" selection-start-column="66" selection-end-line="25" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1226,7 +1211,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="497" max-vertical-offset="1649">
           <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1274,7 +1258,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ML/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-42.793102" vertical-offset="0" max-vertical-offset="1564">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1241" max-vertical-offset="1564">
           <caret line="73" column="13" selection-start-line="71" selection-start-column="29" selection-end-line="73" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1329,7 +1313,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/chess/ChessAI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3448277" vertical-offset="5678" max-vertical-offset="6647">
+        <state vertical-scroll-proportion="0.0" vertical-offset="5678" max-vertical-offset="6647">
           <caret line="338" column="22" selection-start-line="338" selection-start-column="22" selection-end-line="338" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1337,19 +1321,15 @@
             <element signature="e#557#558#0" expanded="true" />
             <element signature="e#593#594#0" expanded="true" />
             <element signature="e#628#629#0" expanded="true" />
-            <element signature="e#5153#5167#0" expanded="true" />
-            <element signature="e#5331#5342#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tests/ChessAITest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15925059" vertical-offset="0" max-vertical-offset="1734">
-          <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-          <folding>
-            <element signature="e#3078#3085#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="-1.8665105" vertical-offset="1052" max-vertical-offset="1734">
+          <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+          <folding />
         </state>
       </provider>
     </entry>
