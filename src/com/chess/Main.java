@@ -17,7 +17,7 @@ public class Main {
         curGui.setModel(game);
         game.setGUI(curGui);
 
-        game.setAIDifficulty(2,3);
+        game.setAIDifficulty(1,3);
 
         curGui.launchGUI();
         game.offset= curGui.getOffset();

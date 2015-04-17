@@ -50,6 +50,8 @@ public class ChessAI {
                 return getMoveFromMinimax(4);
             case 5:
                 return getMoveFromMinimax(5);
+            case 6:
+                return getOptimalMove(3);
             default:
                 throw new InvalidArgumentException(new String[] { "Invalid difficulty value." });
         }

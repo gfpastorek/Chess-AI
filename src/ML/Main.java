@@ -22,7 +22,7 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(4, 4);
+        game.setAIDifficulty(6, 3);
         int max_turns = 200;
 
 
