@@ -53,3 +53,4 @@ out/production/Chess-AI/com/chess/ChessAI.class
 out/production/Chess-AI/com/chess/ChessAI$MoveComparator.class
 *.class
 *.xml
+*.xml
