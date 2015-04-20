@@ -17,7 +17,7 @@ public class ChessAI {
     private int player;
 
     final static int NUM_MOVES_THRESHOLD = 10;
-    final static int PRUNING_SCORE = -1;
+    final static int PRUNING_SCORE = -30;
 
     //greg
     public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) throws InvalidArgumentException {
