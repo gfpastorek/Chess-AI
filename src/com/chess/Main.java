@@ -10,12 +10,20 @@ import java.io.IOException;
 
 public class Main {
 
+    static double[] weights = {
+            10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0,
+            10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5,
+            -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0,
+            -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5
+    };
+
     public static void main(String[] args) throws Exception {
 
         final Game game = new Game();
         final ChessGUI curGui= new ChessGUI();
         curGui.setModel(game);
         game.setGUI(curGui);
+        game.setAiEvaluationWeights(weights);
 
         game.setAIDifficulty(1,3);
 
