@@ -38,6 +38,8 @@ public class Game {
     int highlighted_x, highlighted_y;
     boolean space_selected;
 
+    double[] evalWeights;
+
     int last_winner = -1;
 
     int p1Difficulty = 1;
@@ -68,6 +70,10 @@ public class Game {
     public void setAIDifficulty(int p1Difficulty_, int p2Difficulty_) {
         p1Difficulty = p1Difficulty_;
         p2Difficulty = p2Difficulty_;
+    }
+
+    public void setAiEvaluationWeights(double[] w) {
+        evalWeights = w;
     }
 
     /* check if any game ending conditions are met, and handle them appropriately */
@@ -145,7 +151,7 @@ public class Game {
         switch(type) {
             case 1:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights);
                 playerIsAI[1]=false;
                 break;
             case 2:
@@ -154,13 +160,13 @@ public class Game {
                 break;
             case 3:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights);
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces);
+                aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces, evalWeights);
                 break;
             case 4:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(2, board, board.player1Pieces);
+                aiPlayers[0]= new ChessAI(2, board, board.player1Pieces, evalWeights);
                 playerIsAI[1]=false;
                 break;
         }

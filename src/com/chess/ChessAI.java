@@ -5,6 +5,8 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Greg Pastorek on 4/8/2015.
@@ -19,11 +21,28 @@ public class ChessAI {
     final static int NUM_MOVES_THRESHOLD = 10;
     final static int PRUNING_SCORE = -30;
 
+    double[] weights;
+
     //greg
     public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) throws InvalidArgumentException {
         pieces = pieces_;
         board = board_;
         difficulty = difficulty_;
+
+        if(!pieces.isEmpty()){
+            player = pieces.get(0).getPlayer();
+        } else {
+            throw new InvalidArgumentException(new String[] { "Pieces are missing. "});
+        }
+
+    }
+
+    //greg
+    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_, double[] weights_) throws InvalidArgumentException {
+        pieces = pieces_;
+        board = board_;
+        difficulty = difficulty_;
+        weights = weights_;
 
         if(!pieces.isEmpty()){
             player = pieces.get(0).getPlayer();
@@ -285,6 +304,42 @@ public class ChessAI {
 
     }
 
+    /* give the score of the current board for player 'player' */
+    //greg
+    private double scoreBoard(Board board) throws Exception {
+
+        /* Heavily parallelized code for determining the score of a player */
+        List<Piece> pieces = board.getPieces(player);
+        pieces.addAll(board.getPieces(player ^ 3));
+
+        List<?> scores =
+                IntStream.range(0, pieces.size()).mapToObj(i -> {
+                    try {
+                        Piece examinedPiece = pieces.get(i);
+                        double score = 0;
+
+                        score += weights[4*i] * PieceRank.getRank(examinedPiece);
+                        score += weights[4*i+1] * examinedPiece.validDestinationSet(true).size();
+
+                        if (examinedPiece.getClass() == PawnPiece.class && !examinedPiece.isCaptured()) {
+                            score += weights[4*i+2] * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
+                            score += weights[4*i+3] * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
+                        }
+
+                        return score;
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        return 0;
+                    }
+                }).collect(Collectors.toList());
+
+        return sumd((List<Double>)scores);
+
+    }
+
+
+
     //yuriy
     private Integer[] getMoveFromMinimax(int depth) throws Exception {
         Integer [] bestMove= new Integer [4];
@@ -293,7 +348,7 @@ public class ChessAI {
     }
 
     //yuriy
-    private int MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, int alpha, int beta, Integer[] Move) throws Exception {
+    private double MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, double alpha, double beta, Integer[] Move) throws Exception {
 
         // Switch the next action
         int nextAction=1;
@@ -312,18 +367,18 @@ public class ChessAI {
         if (depth == 0 || currentState.checkEndState()) {
             //if we are at a leaf, we return the heuristic value
             try {
-                return scoreBoard(currentState, currentPlayer);
+                return scoreBoard(currentState);
             } catch (Exception e) {
                 return 0;
             }
         }
-        int bestValue;
+        double bestValue;
         //otherwise we generate a frontier
         List<BoardAndMove> futureStates= generateFrontier(currentState, playerNode);
         if (Maximizing==1) {
-            bestValue = -Integer.MAX_VALUE;
+            bestValue = -Double.MAX_VALUE;
             for (BoardAndMove state : futureStates) {
-                int attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction, currentPlayer, alpha, beta, new Integer[4]);
+                double attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction, currentPlayer, alpha, beta, new Integer[4]);
                 if (attemptValue > bestValue) {
                     //if its better than the value we have so far, we update it
                     Integer[] bestMove= state.getMove();
@@ -342,7 +397,7 @@ public class ChessAI {
         else {
             bestValue = Integer.MAX_VALUE;
             for (BoardAndMove state : futureStates) {
-                int attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction,currentPlayer,alpha, beta,  new Integer[4]);
+                double attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction,currentPlayer,alpha, beta,  new Integer[4]);
                 if (attemptValue < bestValue) {
                     //if its worse than the value we have so far, we update it
                     Integer[] bestMove= state.getMove();
@@ -377,12 +432,54 @@ public class ChessAI {
     }
 
 
-    //greg
-    public Integer sum(List<Integer> list) {
-        Integer sum= 0;
-        for (Integer i:list)
-            sum = sum + i;
+    public static int sum(List<Integer> list) {
+        int sum = 0;
+        for (int i:list)
+            sum += i;
         return sum;
+    }
+
+    //greg
+    public static double sumd(List<Double> list) {
+        double sum = 0.0;
+        for (double i:list)
+            sum += i;
+        return sum;
+    }
+
+
+    /* give the score of the current board for player 'player' */
+    //greg
+    public static double scoreBoard(Board board, int player, double[] weights) throws Exception {
+
+        /* Heavily parallelized code for determining the score of a player */
+        List<Piece> pieces = board.getPieces(player);
+        pieces.addAll(board.getPieces(player ^ 3));
+
+        List<?> scores =
+                IntStream.range(0, pieces.size()).mapToObj(i -> {
+                    try {
+                        Piece examinedPiece = pieces.get(i);
+                        double score = 0;
+
+                        score += weights[4*i] * PieceRank.getRank(examinedPiece);
+                        score += weights[4*i+1] * examinedPiece.validDestinationSet(true).size();
+
+                        if (examinedPiece.getClass() == PawnPiece.class && !examinedPiece.isCaptured()) {
+                            score += weights[4*i+2] * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
+                            score += weights[4*i+3] * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
+                        }
+
+                        return score;
+
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        return 0;
+                    }
+                }).collect(Collectors.toList());
+
+        return sumd((List<Double>)scores);
+
     }
 
 

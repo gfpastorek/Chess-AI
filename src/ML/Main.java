@@ -1,6 +1,7 @@
 package ML;
 
 import com.chess.Board;
+import com.chess.ChessAI;
 import com.chess.Game;
 
 import java.io.IOException;
@@ -13,6 +14,14 @@ import java.util.stream.IntStream;
  */
 public class Main {
 
+
+
+    static double[] weights = {
+            10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0,
+            10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5, 10, 1, 5, 5,
+            -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0, -10, -1, 0, 0,
+            -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5, -10, -1, -5, -5
+    };
     /*
 
      */
@@ -25,6 +34,8 @@ public class Main {
         game.setAIDifficulty(6, 3);
         int max_turns = 200;
 
+        /* evaulation function weights set */
+        game.setAiEvaluationWeights(weights);
 
         double[] playerSpeed = new double[2];
 
@@ -66,6 +77,13 @@ public class Main {
                 winner = -1;
             } else {
                 winner = game.getLastWinner();
+            }
+
+            int player = 1;
+            for(int i = boards.size()-1; i > 0; i--) {
+                Board board = boards.get(i);
+                Board prev_board = boards.get(i-1);
+                double d = ChessAI.scoreBoard(board, player, weights) - ChessAI.scoreBoard(prev_board, player, weights);
             }
 
             if(winner != -1) {
