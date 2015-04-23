@@ -44,54 +44,7 @@ public class Main {
 
             System.out.println("Starting game");
 
-            int turn = 0;
-            List<Board> boards = new LinkedList<Board>();
-
-            game.newGame(3);
-
-            boards.add(game.getBoard());
-
-            /* game is started, loop here */
-            while (game.isRunning()) {
-                //System.out.println("666");
-                if(turn >= max_turns) break;
-                turn++;
-                int player = game.getPlayerTurn();
-
-                long t1 = System.currentTimeMillis();
-                game.makeMove();
-                long t2 = System.currentTimeMillis();
-
-                long dt = t2 - t1;
-                playerSpeed[player-1] = (playerSpeed[player-1] * (turn-1) + dt) / (double)turn;
-
-                //System.out.println("Move took " + (t2-t1) + " milliseconds for player " + player);
-                System.out.println("Average move time for player " + player + " = " + playerSpeed[player-1]);
-
-                boards.add(game.getBoard());
-
-                game.checkIfGameOver();
-            }
-
-            int winner;
-            if(turn >= max_turns) {
-                winner = -1;
-            } else {
-                winner = game.getLastWinner();
-            }
-
-            double lambda = 0.7;
-            double alpha = 1.0;
-
-            updateWeights(boards, winner, lambda, alpha);
-
-            if(winner != -1) {
-                System.out.println("" + winner + " won");
-            }
-
-            System.out.println("Average move time for player 1 = " + playerSpeed[0]);
-            System.out.println("Average move time for player 2 = " + playerSpeed[1]);
-
+            runGame(game, max_turns, playerSpeed);
         }
 
         int p1score = game.getPlayerScore(1);
@@ -100,6 +53,56 @@ public class Main {
         System.out.println("Score: " + p1score + " - " + p2score);
 
 
+    }
+
+    private static void runGame(Game game, int max_turns, double[] playerSpeed) throws Exception {
+        int turn = 0;
+        List<Board> boards = new LinkedList<Board>();
+
+        game.newGame(3);
+
+        boards.add(game.getBoard());
+
+            /* game is started, loop here */
+        while (game.isRunning()) {
+            //System.out.println("666");
+            if(turn >= max_turns) break;
+            turn++;
+            int player = game.getPlayerTurn();
+
+            long t1 = System.currentTimeMillis();
+            game.makeMove();
+            long t2 = System.currentTimeMillis();
+
+            long dt = t2 - t1;
+            playerSpeed[player-1] = (playerSpeed[player-1] * (turn-1) + dt) / (double)turn;
+
+            //System.out.println("Move took " + (t2-t1) + " milliseconds for player " + player);
+            System.out.println("Average move time for player " + player + " = " + playerSpeed[player-1]);
+
+            boards.add(game.getBoard());
+
+            game.checkIfGameOver();
+        }
+
+        int winner;
+        if(turn >= max_turns) {
+            winner = -1;
+        } else {
+            winner = game.getLastWinner();
+        }
+
+        double lambda = 0.7;
+        double alpha = 1.0;
+
+        updateWeights(boards, winner, lambda, alpha);
+
+        if(winner != -1) {
+            System.out.println("" + winner + " won");
+        }
+
+        System.out.println("Average move time for player 1 = " + playerSpeed[0]);
+        System.out.println("Average move time for player 2 = " + playerSpeed[1]);
     }
 
     /* update weight vector using temporal difference learning update rule */
