@@ -468,7 +468,9 @@ public class ChessAI {
                         double score = 0;
 
                         score += weights[4*i] * PieceRank.getRank(examinedPiece);
-                        score += weights[4*i+1] * examinedPiece.validDestinationSet(true).size();
+
+                        if(weights[4*i+1] != 0)
+                            score += weights[4*i+1] * examinedPiece.validDestinationSet(true).size();
 
                         if (examinedPiece.getClass() == PawnPiece.class && !examinedPiece.isCaptured()) {
                             score += weights[4*i+2] * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);

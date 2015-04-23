@@ -3,6 +3,7 @@ package ML;
 import com.chess.Board;
 import com.chess.ChessAI;
 import com.chess.Game;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -79,12 +80,10 @@ public class Main {
                 winner = game.getLastWinner();
             }
 
-            int player = 1;
-            for(int i = boards.size()-1; i > 0; i--) {
-                Board board = boards.get(i);
-                Board prev_board = boards.get(i-1);
-                double d = ChessAI.scoreBoard(board, player, weights) - ChessAI.scoreBoard(prev_board, player, weights);
-            }
+            double lambda = 0.7;
+            double alpha = 1.0;
+
+            updateWeights(boards, winner, lambda, alpha);
 
             if(winner != -1) {
                 System.out.println("" + winner + " won");
@@ -101,6 +100,64 @@ public class Main {
         System.out.println("Score: " + p1score + " - " + p2score);
 
 
+    }
+
+    /* update weight vector using temporal difference learning update rule */
+    private static void updateWeights(List<Board> boards, int winner, double lambda, double alpha) throws Exception {
+        int player = 1;
+
+        int N = boards.size();
+        double[] new_weights = weights.clone();
+        double[] d = new double[N-1];
+
+        /* N-1th temporal difference is 1000 for win, -1000 for loss, and 0 for tie */
+        d[N-1] = (winner == player) ? 1000 : (winner == (player ^ 3) ? -1000 : 0);
+
+        for(int i = N-2; i > 0; i--) {
+            Board board = boards.get(i+1);
+            Board prev_board = boards.get(i);
+            d[i] = ChessAI.scoreBoard(board, player, weights) - ChessAI.scoreBoard(prev_board, player, weights);
+            double[] gradient = gradient_scoreBoard(board, player);
+            double s = computeTdScalar(lambda, N, d[i], i);
+            vectorSum(new_weights, gradient, alpha*s);
+        }
+    }
+
+    /* compute the scalar for the ith temporal difference update rule */
+    private static double computeTdScalar(double lambda, int n, double d, int i) {
+        double s = 0;
+        for(int j=i; j < n -1; j++)
+            s+= Math.pow(lambda, j-i) * d;
+        return s;
+    }
+
+    /* compute vector sum result = result + scalar*vector */
+    /* added to 'result' and manipulates array            */
+    private static void vectorSum(double[] result, double[] vector, double scalar) throws InvalidArgumentException {
+
+        if(result.length != vector.length) {
+            throw new InvalidArgumentException(new String[]{"Dimension mismatch"});
+        }
+
+        for(int i = 0; i < result.length; i++) {
+            result[i] += vector[i] * scalar;
+        }
+
+    }
+
+
+    /* compute gradient vector for scoring function */
+    private static double[] gradient_scoreBoard(Board board, int player) throws Exception {
+
+        double[] gradient = new double[weights.length];
+
+        for(int i = 0; i < weights.length; i++) {
+            double[] w = new double[weights.length];
+            w[i] = 1;
+            gradient[i] = ChessAI.scoreBoard(board, player, w);
+        }
+
+        return gradient;
     }
 
 }
