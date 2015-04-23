@@ -32,8 +32,8 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(6, 3);
-        int max_turns = 200;
+        game.setAIDifficulty(3, 1);
+        int max_turns = 4;
 
         /* evaulation function weights set */
         game.setAiEvaluationWeights(weights);
@@ -80,7 +80,7 @@ public class Main {
             //System.out.println("Move took " + (t2-t1) + " milliseconds for player " + player);
             System.out.println("Average move time for player " + player + " = " + playerSpeed[player-1]);
 
-            boards.add(game.getBoard());
+            boards.add(new Board(game.getBoard()));
 
             game.checkIfGameOver();
         }
@@ -111,7 +111,7 @@ public class Main {
 
         int N = boards.size();
         double[] new_weights = weights.clone();
-        double[] d = new double[N-1];
+        double[] d = new double[N];
 
         /* N-1th temporal difference is 1000 for win, -1000 for loss, and 0 for tie */
         d[N-1] = (winner == player) ? 1000 : (winner == (player ^ 3) ? -1000 : 0);
@@ -124,6 +124,21 @@ public class Main {
             double s = computeTdScalar(lambda, N, d[i], i);
             vectorSum(new_weights, gradient, alpha*s);
         }
+
+        printVector(new_weights);
+
+        weights = new_weights;
+
+    }
+
+    private static void printVector(double[] new_weights) {
+        String str = "";
+
+        for(double w: new_weights) {
+            str += Double.toString(w) + ", ";
+        }
+
+        System.out.println(str.substring(0, str.length()-2));
     }
 
     /* compute the scalar for the ith temporal difference update rule */

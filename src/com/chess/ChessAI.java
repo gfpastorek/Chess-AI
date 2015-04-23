@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.*;
+
 /**
  * Created by Greg Pastorek on 4/8/2015.
  */
@@ -276,7 +278,6 @@ public class ChessAI {
         return scoreBoardForPlayer(board, player) - scoreBoardForPlayer(board, player ^ 3);
     }
 
-
     /* give the score of the current board for player 'player' */
     //greg
     private int scoreBoardForPlayer(Board board, int player) throws Exception {
@@ -337,7 +338,7 @@ public class ChessAI {
                         System.out.println(e.getMessage());
                         return 0;
                     }
-                }).collect(Collectors.toList());
+                }).collect(toList());
 
         return sumd((List<Double>)scores);
 
@@ -372,7 +373,7 @@ public class ChessAI {
         if (depth == 0 || currentState.checkEndState()) {
             //if we are at a leaf, we return the heuristic value
             try {
-                return scoreBoard(currentState);
+                return scoreBoard(currentState, player, weights);
             } catch (Exception e) {
                 return 0;
             }
@@ -445,10 +446,15 @@ public class ChessAI {
     }
 
     //greg
-    public static double sumd(List<Double> list) {
+    public static double sumd(List list) {
         double sum = 0.0;
-        for (double i:list)
-            sum += i;
+        for (Object i: list) {
+            try {
+                sum += (double) ((Number)i).floatValue();
+            } catch (Exception e) {
+                System.out.println("FUCK");
+            }
+        }
         return sum;
     }
 
@@ -458,7 +464,8 @@ public class ChessAI {
     public static double scoreBoard(Board board, int player, double[] weights) throws Exception {
 
         /* Heavily parallelized code for determining the score of a player */
-        List<Piece> pieces = board.getPieces(player);
+        List<Piece> pieces = new ArrayList<Piece>();
+        pieces.addAll(board.getPieces(player));
         pieces.addAll(board.getPieces(player ^ 3));
 
         List<?> scores =
@@ -480,12 +487,12 @@ public class ChessAI {
                         return score;
 
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        e.printStackTrace();
                         return 0;
                     }
-                }).collect(Collectors.toList());
+                }).collect(toList());
 
-        return sumd((List<Double>)scores);
+        return sumd(scores);
 
     }
 
