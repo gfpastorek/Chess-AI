@@ -46,6 +46,8 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
         private AudioInputStream audioIn;
         private String p1_name;
         private String p2_name;
+        private Color tile_one;
+        private Color tile_two;
 
         static final File workingDirectory = new File(System.getProperty("user.dir"));
         static final File imageDirectory = new File(workingDirectory, "src\\ChessGUI\\ChessPiecePNG");
@@ -92,15 +94,17 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
             chessBoard.setBounds(0, 0, chessBoardWidth*60,chessBoardHeight*60);
             chessBoard.setLayout(new GridLayout(8,8));
             chessBoard.getLayout();
+            tile_one=new Color(209, 139, 71);
+            tile_two=new Color(255, 206, 158);
             for (int x = 0; x < 8; x++) {
                 for (int y = 0; y < 8; y++) {               // square subdivision
                     JPanel curPiece = new JPanel(new BorderLayout());
                     curPiece.setName("chessTile");
                     if ((x % 2 == 1 && y % 2 == 1)|| (x % 2 == 0 && y % 2 == 0)) {
-                        curPiece.setBackground(new Color(209, 139, 71));
+                        curPiece.setBackground(tile_one);
                     }
                     else {
-                        curPiece.setBackground(new Color(255, 206, 158));
+                        curPiece.setBackground(tile_two);
                     }
                     chessBoard.add(curPiece);
                 }
@@ -127,6 +131,9 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
             JMenuItem curScore = new JMenuItem("Get Score");
             curScore.addActionListener(this);
             options.add(curScore);
+            JMenuItem helperAI = new JMenuItem("Get Help From AI Overlords");
+            helperAI.addActionListener(this);
+            options.add(helperAI);
             menubar.add(options);
             window.setJMenuBar(menubar);
         }
@@ -186,6 +193,14 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
                     int player_two_score= curGame.getPlayerScore(2);
                     String curScore= p1_name+": "+Integer.toString(player_one_score)+" "+p2_name+": "+Integer.toString(player_two_score);
                     JOptionPane.showMessageDialog(null,curScore,"Current Score",JOptionPane.WARNING_MESSAGE);
+                }
+                else if (e.getActionCommand()=="Get Help From AI Overlords"){
+                    try {
+                        curGame.getAIHelp();
+                    }
+                    catch (Exception ex){
+                        System.out.println(ex.getMessage());
+                    }
                 }
             } catch (InvalidArgumentException e1) {
                 e1.printStackTrace();
@@ -307,6 +322,14 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
         public void gameOver(){
             gameRunning=false;
         }
+        public void highlightHelperSquare(Integer [] move){
+            JPanel curSquare= (JPanel)chessBoard.getComponent(8*move[1]+move[0]);
+            curSquare.setBackground(new Color(50,50,150));
+            curSquare= (JPanel)chessBoard.getComponent(8*move[3]+move[2]);
+            curSquare.setBackground(new Color(50,50,150));
+            chessBoard.revalidate();
+            chessBoard.repaint();
+        }
         public void updatePieces(Board curBoard){
             int width= curBoard.getMaxX();
             int length= curBoard.getMaxY();
@@ -364,6 +387,17 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
                         curPanel.add(curLabel);
                     }
 
+                }
+            }
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {               // square subdivision
+                    JPanel curTile= (JPanel)chessBoard.getComponent(y*8+x);
+                    if ((x % 2 == 1 && y % 2 == 1)|| (x % 2 == 0 && y % 2 == 0)) {
+                        curTile.setBackground(tile_one);
+                    }
+                    else {
+                        curTile.setBackground(tile_two);
+                    }
                 }
             }
             chessBoard.revalidate();

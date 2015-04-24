@@ -151,6 +151,7 @@ public class Game {
         board = new Board(8,8);
         board.resetBoard();
         openingSequence=true;
+        previousMove=null;
 
         if(gui != null)
             gui.updatePieces(board);
@@ -331,10 +332,10 @@ public class Game {
     }
     public boolean moveReceiver(int [] possibleMove){
         int [] newMove=new int [4];
-        newMove[0]= convertUnits(possibleMove[0]);
-        newMove[1]= convertUnits(possibleMove[1]);
-        newMove[2]= convertUnits(possibleMove[2]);
-        newMove[3]= convertUnits(possibleMove[3]);
+        newMove[0]= convertUnits(possibleMove[0], true);
+        newMove[1]= convertUnits(possibleMove[1], true);
+        newMove[2]= convertUnits(possibleMove[2], true);
+        newMove[3]= convertUnits(possibleMove[3], true);
         movesQueue.add(newMove);
         handleInput();
         while(responseQueue.isEmpty()){
@@ -346,8 +347,13 @@ public class Game {
         } // sleep, my child
         return responseQueue.poll();
     }
-    private int convertUnits(int oldUnits){
-        return (oldUnits-offset)/spacing;
+    private int convertUnits(int oldUnits, boolean towards){
+        if(towards) {
+            return (oldUnits - offset) / spacing;
+        }
+        else{
+            return (oldUnits*spacing)+offset;
+        }
     }
 
     private void handleInput(){
@@ -440,5 +446,29 @@ public class Game {
     }
     public OpeningGraph getOpeningLibrary(){
         return openingLibrary;
+    }
+    public void getAIHelp() throws Exception{
+        ChessAI helperAI;
+        if (player_turn==1) {
+            helperAI = new ChessAI(2, board, board.player1Pieces, openingLibrary);
+        }
+        else{
+            helperAI = new ChessAI(2, board, board.player2Pieces, openingLibrary);
+        }
+        Integer move[]=null;
+        if (openingSequence){
+            move=helperAI.getMoveFromOpening(previousMove);
+            if (move==null){
+                openingSequence=false;
+            }
+        }
+        if(!openingSequence) {
+            move = helperAI.getMove();
+        }
+        /*move[0]=convertUnits(move[0], true);
+        move[1]=convertUnits(move[1], true);
+        move[2]=convertUnits(move[2], true);
+        move[3]=convertUnits(move[3], true);*/
+        gui.highlightHelperSquare(move);
     }
 }

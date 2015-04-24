@@ -25,7 +25,7 @@ public class Main {
         game.setGUI(curGui);
         game.setAiEvaluationWeights(weights);
 
-        game.setAIDifficulty(1,3);
+        game.setAIDifficulty(1,2);
 
         curGui.launchGUI();
         game.offset= curGui.getOffset();

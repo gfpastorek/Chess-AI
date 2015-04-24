@@ -84,9 +84,9 @@ public class ChessAI {
             case 0:
                 return getRandomMove();
             case 1:
-                return getOptimalMove(2);
-            case 2:
                 return getMoveFromMinimax(2);
+            case 2:
+                return getOptimalMove(2);
             case 3:
                 return getMoveFromMinimax(3);
             case 4:
@@ -365,7 +365,7 @@ public class ChessAI {
 
     //yuriy
     private Integer[] getMoveFromMinimax(int depth) throws Exception {
-        Integer [] bestMove= new Integer [4];
+        Integer [] bestMove= new Integer[4];
         MiniMax(board, depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
         return bestMove;
     }
@@ -571,6 +571,5 @@ public class ChessAI {
         openingMove[3]=curMove.getY();
         return openingMove;
     }
-
 
 }
