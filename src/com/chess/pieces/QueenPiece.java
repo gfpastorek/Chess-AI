@@ -74,6 +74,8 @@ public class QueenPiece extends Piece {
     /* retrieve the set of all valid moves for this piece as a tuple of [src_x, src_y, dst_x, dst_y] */
     protected List<Integer[]> retrieveValidDestinationSet(boolean allowCheck) throws Exception {
 
+        //board.getBitboards().findQueenMoves(player, loc_x, loc_y);
+
         List<Integer[]> validMoves = new ArrayList<Integer[]>();
 
         for(int n = 1; n < 8; n++) {

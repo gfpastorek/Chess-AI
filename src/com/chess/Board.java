@@ -35,10 +35,13 @@ public class Board {
     boolean Castle1=false;
     boolean Castle2=false;
 
+    BitBoards bitboards;
+
     public Board(int dim_x, int dim_y){
         board_x = dim_x;
         board_y = dim_y;
         spaces = new Piece[dim_x][dim_y];
+        bitboards = new BitBoards(this);
     }
 
     /* board copy constructor, we call this when saving the previous board for the undo function */
@@ -76,15 +79,19 @@ public class Board {
             }
         }
 
+        bitboards = new BitBoards(this);
+
+    }
+
+    public BitBoards getBitboards() {
+        return bitboards;
     }
 
     /* Initializes all the board pieces to their starting positions. */
     /* Used for starting a game and also resets a current game. */
-    public void resetBoard(boolean selectedClassicChess){
-        if(selectedClassicChess) {
-            addPiecesForPlayer_ClassicMode(1);
-            addPiecesForPlayer_ClassicMode(2);
-        }
+    public void resetBoard(){
+        addPiecesForPlayer_ClassicMode(1);
+        addPiecesForPlayer_ClassicMode(2);
     }
 
     /* Initialize all the board pieces for given player using classic configuration. */
@@ -165,6 +172,8 @@ public class Board {
         }
 
         turn++;
+
+        bitboards.updateBoard();
 
         return 0;
     }

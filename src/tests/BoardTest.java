@@ -90,7 +90,7 @@ public class BoardTest {
     public void testResetBoardConfigurationClasses() throws Exception {
         Board testBoard = new Board(8, 8);
 
-        testBoard.resetBoard(true);
+        testBoard.resetBoard();
 
         assertEquals("Correct rook placement at (0, 0)", RookPiece.class, testBoard.getPiece(0, 0).getClass());
         assertEquals("Correct knight placement at (1, 0)", KnightPiece.class, testBoard.getPiece(1, 0).getClass());
@@ -134,7 +134,7 @@ public class BoardTest {
     public void testResetBoardConfigurationPlayer() throws Exception {
         Board testBoard = new Board(8, 8);
 
-        testBoard.resetBoard(true);
+        testBoard.resetBoard();
 
         for(int x = 0; x < 8; x++) {
             assertEquals("Correct player placement at (" + x + ", 0)", 1, testBoard.getPiece(x, 0).getPlayer());
@@ -209,7 +209,7 @@ public class BoardTest {
     @Test
     public void testCopyConstructor() throws Exception {
         Board testBoard = new Board(8, 8);
-        testBoard.resetBoard(true);
+        testBoard.resetBoard();
 
         Board copyBoard = new Board(testBoard);
 

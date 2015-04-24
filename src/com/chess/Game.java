@@ -135,7 +135,7 @@ public class Game {
         }*/
 
         board = new Board(8,8);
-        board.resetBoard(true);
+        board.resetBoard();
 
         if(gui != null)
             gui.updatePieces(board);
@@ -245,7 +245,11 @@ public class Game {
     public void pollAI() throws Exception {
         if(playerIsAI[player_turn-1] && !aiLock){
             aiLock = true;
-            makeAiMove(player_turn);
+            try {
+                makeAiMove(player_turn);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             aiLock = false;
         }
     }

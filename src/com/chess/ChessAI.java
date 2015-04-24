@@ -96,7 +96,7 @@ public class ChessAI {
         /* select a random (valid) move from a random piece */
         while(!potentialPieces.isEmpty()) {
             Piece piece = potentialPieces.remove(0);
-            List<Integer[]> moveSet = piece.validDestinationSet(true);
+            List<Integer[]> moveSet = piece.validDestinationSet(false);
             if(!moveSet.isEmpty()) {
                 Collections.shuffle(moveSet);
                 return moveSet.remove(0);

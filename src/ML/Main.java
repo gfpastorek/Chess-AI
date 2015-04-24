@@ -32,8 +32,8 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(3, 1);
-        int max_turns = 4;
+        game.setAIDifficulty(2, 0);
+        int max_turns = 200;
 
         /* evaulation function weights set */
         game.setAiEvaluationWeights(weights);
@@ -114,12 +114,12 @@ public class Main {
         double[] d = new double[N];
 
         /* N-1th temporal difference is 1000 for win, -1000 for loss, and 0 for tie */
-        d[N-1] = (winner == player) ? 1000 : (winner == (player ^ 3) ? -1000 : 0);
+        d[N-1] = (winner == player) ? 1 : (winner == (player ^ 3) ? -1 : 0);
 
         for(int i = N-2; i > 0; i--) {
             Board board = boards.get(i+1);
             Board prev_board = boards.get(i);
-            d[i] = ChessAI.scoreBoard(board, player, weights) - ChessAI.scoreBoard(prev_board, player, weights);
+            d[i] = (ChessAI.scoreBoard(board, player, weights) - ChessAI.scoreBoard(prev_board, player, weights)) / 1000.0;
             double[] gradient = gradient_scoreBoard(board, player);
             double s = computeTdScalar(lambda, N, d[i], i);
             vectorSum(new_weights, gradient, alpha*s);
