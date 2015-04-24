@@ -27,7 +27,7 @@ public class ChessAITest extends TestCase {
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
         ai_pieces.add(whiteKing);
-        ChessAI ai = new ChessAI(0, testBoard, ai_pieces);
+        ChessAI ai = new ChessAI(0, testBoard, ai_pieces, null);
 
         Integer[] move = ai.getMove();
 
@@ -60,7 +60,7 @@ public class ChessAITest extends TestCase {
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
         ai_pieces.add(whiteKing);
-        ChessAI ai = new ChessAI(0, testBoard, ai_pieces);
+        ChessAI ai = new ChessAI(0, testBoard, ai_pieces, null);
 
         Integer[] move = ai.getMove();
 
@@ -88,7 +88,7 @@ public class ChessAITest extends TestCase {
 
         ArrayList<Piece> ai_pieces = new ArrayList<Piece>();
         ai_pieces.add(whiteKing);
-        ChessAI ai = new ChessAI(2, testBoard, ai_pieces);
+        ChessAI ai = new ChessAI(2, testBoard, ai_pieces, null);
 
         Integer[] move = ai.getMove();
         int src_x = move[0];

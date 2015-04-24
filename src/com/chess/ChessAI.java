@@ -1,5 +1,7 @@
 package com.chess;
 
+import OpeningLibrary.MoveNode;
+import OpeningLibrary.OpeningGraph;
 import com.chess.pieces.PawnPiece;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import sun.plugin.dom.exception.InvalidStateException;
@@ -19,9 +21,12 @@ public class ChessAI {
     private int difficulty;
     private Board board;
     private int player;
+    OpeningGraph openingLibrary;
+    MoveNode currentOpeningStep=null;
 
     final static int NUM_MOVES_THRESHOLD = 10;
     final static int PRUNING_SCORE = -30;
+    static int USING_OPENING_LIBRARY= 1;
 
     double[] weights = {
             10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0,
@@ -31,7 +36,7 @@ public class ChessAI {
     };
 
     //greg
-    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_) throws InvalidArgumentException {
+    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_, OpeningGraph openings) throws InvalidArgumentException {
         pieces = pieces_;
         board = board_;
         difficulty = difficulty_;
@@ -41,11 +46,17 @@ public class ChessAI {
         } else {
             throw new InvalidArgumentException(new String[] { "Pieces are missing. "});
         }
+        if(openings!=null){
+            openingLibrary=openings;
+        }
+        else{
+            USING_OPENING_LIBRARY=0;
+        }
 
     }
 
     //greg
-    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_, double[] weights_) throws InvalidArgumentException {
+    public ChessAI(int difficulty_, Board board_, ArrayList<Piece> pieces_, double[] weights_, OpeningGraph openings) throws InvalidArgumentException {
         pieces = pieces_;
         board = board_;
         difficulty = difficulty_;
@@ -55,6 +66,12 @@ public class ChessAI {
             player = pieces.get(0).getPlayer();
         } else {
             throw new InvalidArgumentException(new String[] { "Pieces are missing. "});
+        }
+        if(openings!=null){
+            openingLibrary=openings;
+        }
+        else{
+            USING_OPENING_LIBRARY=0;
         }
 
     }
@@ -494,6 +511,65 @@ public class ChessAI {
 
         return sumd(scores);
 
+    }
+    public Integer[] getMoveFromOpening(Integer[] lastMove){
+        if(USING_OPENING_LIBRARY==0){
+            return null;
+        }
+        Integer[] openingMove=null;
+        MoveNode nextSequence=null;
+        if (currentOpeningStep!=null) {
+            // setting up case where AI did opening move, human player make follow up
+            nextSequence = currentOpeningStep.findNextMove(lastMove);
+        }
+        if (lastMove==null){
+            //first move of the game
+            Random randomGenerator = new Random();
+            int librarySize= openingLibrary.getRootNodes().size();
+            int randomMove = randomGenerator.nextInt(librarySize);
+            MoveNode randomOpening=openingLibrary.getRootNodes().get(randomMove);
+            Piece movedPiece= board.checkOpeningMoveValidity(randomOpening,player);
+            if (movedPiece!=null){
+                openingMove= openingMoveConverter(movedPiece, randomOpening);
+                currentOpeningStep=randomOpening;
+            }
+        }
+        else if(currentOpeningStep==null) {
+            //Human made move first, AI must check if it is in opening sequence
+            for (MoveNode opening : openingLibrary.getRootNodes()) {
+                if ((lastMove[2] == opening.getX()) &&
+                        (lastMove[3] == opening.getY())) {
+                    MoveNode moveCandidate= opening.getRandomNextMoveNode();
+                    if(opening.getNextMove()!=null){
+                        Piece movedPiece= board.checkOpeningMoveValidity(moveCandidate ,player);
+                        if (movedPiece!=null){
+                            currentOpeningStep=moveCandidate;
+                            openingMove= openingMoveConverter(movedPiece, moveCandidate);
+                        }
+                    }
+                }
+            }
+        }
+        else if (nextSequence!=null) {
+            //human player made play in the opening sequence. GG
+            MoveNode moveCandidate= nextSequence.getRandomNextMoveNode();
+            if (moveCandidate!=null){
+                Piece movedPiece=board.checkOpeningMoveValidity(moveCandidate, player);
+                if (movedPiece!=null) {
+                    openingMove= openingMoveConverter(movedPiece, moveCandidate);
+                    currentOpeningStep=moveCandidate;
+                }
+            }
+        }
+        return openingMove;
+    }
+    private Integer[] openingMoveConverter(Piece curPiece, MoveNode curMove){
+        Integer[] openingMove= new Integer[4];
+        openingMove[0]=curPiece.getLocX();
+        openingMove[1]=curPiece.getLocY();
+        openingMove[2]=curMove.getX();
+        openingMove[3]=curMove.getY();
+        return openingMove;
     }
 
 

@@ -1,5 +1,6 @@
 package com.chess;
 
+import OpeningLibrary.MoveNode;
 import com.chess.pieces.*;
 
 import java.lang.reflect.Constructor;
@@ -518,6 +519,32 @@ public class Board {
             System.out.println(e.getMessage());
         }
         return endState;
+    }
+    public Piece checkOpeningMoveValidity(MoveNode openingMove, int player){
+        int successMoveCount=0;
+        Piece movedPiece=null;
+        Integer[] moveLoc= openingMove.getNextMove();
+        Class piece= openingMove.getPieceClass();
+        List<Piece> pieces= getPieces(player);
+        for (Piece curPiece:pieces){
+            if (curPiece.getClass()==piece){
+                if (curPiece.isValidMove(moveLoc[0], moveLoc[1])){
+                    if(successMoveCount==0) {
+                        successMoveCount++;
+                        movedPiece = curPiece;
+                    }
+                    else{
+                        if(movedPiece.getLocX()==openingMove.getPieceLocHint()){
+                            return movedPiece;
+                        }
+                        else{
+                            return curPiece;
+                        }
+                    }
+                }
+            }
+        }
+        return movedPiece;
     }
 
 }

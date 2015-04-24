@@ -1,10 +1,14 @@
 package com.chess;
 
+import OpeningLibrary.LibraryGraphBuilder;
+import OpeningLibrary.OpeningGraph;
+import OpeningLibrary.OpeningLibraryParser;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 
 import ChessGUI.*;
@@ -27,6 +31,8 @@ public class Game {
 
     LinkedList<int []> movesQueue = new LinkedList<int []>();
     LinkedList<Boolean> responseQueue = new LinkedList<Boolean>();
+    static final File libraryDirectory= new File(System.getProperty("user.dir"),"src\\OpeningLibrary" );
+    OpeningGraph openingLibrary=null;
 
     /* game state variables */
     int player1Score;
@@ -39,6 +45,7 @@ public class Game {
     boolean space_selected;
 
     double[] evalWeights;
+    boolean openingSequence=true;
 
     int last_winner = -1;
 
@@ -46,8 +53,15 @@ public class Game {
     int p2Difficulty = 1;
 
     Board previousBoard = null;
+    Integer[] previousMove=null;
 
     public Game() {
+        try {
+            buildOpeningLibrary();
+        }
+        catch(Exception e){
+            setOpeningLibrary(null);
+        }
 
     }
 
@@ -136,6 +150,7 @@ public class Game {
 
         board = new Board(8,8);
         board.resetBoard();
+        openingSequence=true;
 
         if(gui != null)
             gui.updatePieces(board);
@@ -151,7 +166,7 @@ public class Game {
         switch(type) {
             case 1:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights, openingLibrary);
                 playerIsAI[1]=false;
                 break;
             case 2:
@@ -160,13 +175,13 @@ public class Game {
                 break;
             case 3:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights);
+                aiPlayers[0]= new ChessAI(p1Difficulty, board, board.player1Pieces, evalWeights, openingLibrary);
                 playerIsAI[1] = true;
-                aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces, evalWeights);
+                aiPlayers[1] = new ChessAI(p2Difficulty, board, board.player2Pieces, evalWeights, openingLibrary);
                 break;
             case 4:
                 playerIsAI[0]=true;
-                aiPlayers[0]= new ChessAI(2, board, board.player1Pieces, evalWeights);
+                aiPlayers[0]= new ChessAI(2, board, board.player1Pieces, evalWeights, openingLibrary);
                 playerIsAI[1]=false;
                 break;
         }
@@ -291,7 +306,17 @@ public class Game {
         }
 
         /* returns move as [src_x, src_y, dst_x, dst_y] */
-        Integer[] move = ai.getMove();
+        Integer move[]=null;
+        if (openingSequence){
+            move=ai.getMoveFromOpening(previousMove);
+            if (move==null){
+                openingSequence=false;
+            }
+        }
+        if(!openingSequence) {
+            move = ai.getMove();
+        }
+        previousMove= move;
         previousBoard = new Board(board);
         board.movePiece(move[0], move[1], move[2], move[3]);
         player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
@@ -363,6 +388,7 @@ public class Game {
                     player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
                     //gui.setStatusbar(playerName[player_turn-1] + "'s turn!");
                     previousBoard = potentialPreviousBoard;
+                    previousMove= new Integer[]{xInitial, yInitial, xEnd, yEnd};
                     //gui.setUndoButtonEnabled(true);
                     responseQueue.push(true);
                     break;
@@ -398,5 +424,21 @@ public class Game {
             return player2Score;
         }
 
+    }
+    public void buildOpeningLibrary() throws Exception{
+        OpeningLibraryParser openingMoves= OpeningLibraryParser.getInstance();
+        openingMoves.setDirectory(libraryDirectory);
+        if(openingMoves.updateLibrary("http://www.chess.com/openings/")){
+            openingMoves.parseOpeningGraph();
+        }
+        LibraryGraphBuilder graphBuilder= LibraryGraphBuilder.getInstance();
+        graphBuilder.setDirectory(libraryDirectory);
+        setOpeningLibrary(graphBuilder.buildGraphFromXML());
+    }
+    public void setOpeningLibrary(OpeningGraph library){
+        openingLibrary= library;
+    }
+    public OpeningGraph getOpeningLibrary(){
+        return openingLibrary;
     }
 }
