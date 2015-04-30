@@ -1,5 +1,7 @@
 package com.chess;
 
+import com.chess.BitBoards.BitBoard;
+
 import OpeningLibrary.MoveNode;
 import OpeningLibrary.OpeningGraph;
 import com.chess.pieces.PawnPiece;
@@ -27,6 +29,10 @@ public class ChessAI {
     final static int NUM_MOVES_THRESHOLD = 10;
     final static int PRUNING_SCORE = -30;
     static int USING_OPENING_LIBRARY= 1;
+
+    BitBoards bitBoards;
+
+    final static boolean YAH = true;
 
     double[] weights = {
             10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0, 10, 1, 0, 0,
@@ -79,14 +85,20 @@ public class ChessAI {
     /* make an AI move, execution depends on the difficulty setting */
     /* returns a list of 4 numbers, src_x, src_y, dst_x, dst_y      */
     public Integer[] getMove() throws Exception {
+        return getMove(difficulty);
+    }
 
-        switch(difficulty) {
+    /* make an AI move, execution depends on the difficulty setting */
+    /* returns a list of 4 numbers, src_x, src_y, dst_x, dst_y      */
+    public Integer[] getMove(int difficulty_) throws Exception {
+
+        switch(difficulty_) {
             case 0:
                 return getRandomMove();
             case 1:
                 return getMoveFromMinimax(2);
             case 2:
-                return getOptimalMove(2);
+                return getOptimalMove(1);
             case 3:
                 return getMoveFromMinimax(3);
             case 4:
@@ -203,6 +215,7 @@ public class ChessAI {
     }
 
     //yuriy
+    /*
     private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer) throws Exception {
         List<BoardAndMove> frontier= new ArrayList<BoardAndMove>();
         List<Piece> pieces_= startState.getPieces(currentPlayer);
@@ -219,7 +232,43 @@ public class ChessAI {
             }
         }
         return frontier;
+    }*/
+
+
+    private List<BoardAndMove> generateFrontier(BitBoard startState, int currentPlayer) throws Exception {
+
+        List<BoardAndMove> frontier = new ArrayList<BoardAndMove>();
+
+        List<Piece> pieces = board.getPieces(currentPlayer);
+
+        BitBoards bitBoards = board.getBitboards();
+
+        for (Piece piece : pieces) {
+
+            Integer[] loc = startState.locations.get(piece);
+
+            long targets = BitBoards.getMoves(startState, piece, currentPlayer, loc[0], loc[1]);
+
+            if(targets != 0L) {
+                List<BitBoard> moveBoards = BitBoards.makeMoves(startState, targets, loc[0], loc[1], currentPlayer, piece);
+
+                for(BitBoard moveBoard: moveBoards){
+                    if((new BoardAndMove(startState, moveBoard, currentPlayer)).getMove()[3] == -1 ||
+                        (new BoardAndMove(startState, moveBoard, currentPlayer)).getMove()[0] == -1){
+                        if(YAH)
+                            continue;
+                        System.out.println("A");
+                        BitBoards.getMoves(startState, piece, currentPlayer, loc[0], loc[1]);
+                        (new BoardAndMove(startState, moveBoard, currentPlayer)).getMove();
+                    }
+                    frontier.add(new BoardAndMove(startState, moveBoard, currentPlayer));
+                }
+            }
+
+        }
+        return frontier;
     }
+
 
 
     /* rank moves from best to worst, look-ahead factor is 1 */
@@ -366,12 +415,12 @@ public class ChessAI {
     //yuriy
     private Integer[] getMoveFromMinimax(int depth) throws Exception {
         Integer [] bestMove= new Integer[4];
-        MiniMax(board, depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
+        MiniMax(board.getBitboards().getBitBord(), depth, 1, player, -Integer.MAX_VALUE, Integer.MAX_VALUE, bestMove);
         return bestMove;
     }
 
     //yuriy
-    private double MiniMax(Board boardState, int depth, int Maximizing, int currentPlayer, double alpha, double beta, Integer[] Move) throws Exception {
+    private double MiniMax(BitBoard boardState, int depth, int Maximizing, int currentPlayer, double alpha, double beta, Integer[] Move) throws Exception {
 
         // Switch the next action
         int nextAction=1;
@@ -385,21 +434,24 @@ public class ChessAI {
             playerNode=currentPlayer;
         }
 
-        Board currentState = new Board(boardState);
-
-        if (depth == 0 || currentState.checkEndState()) {
+        if (depth == 0) {
             //if we are at a leaf, we return the heuristic value
             try {
-                return scoreBoard(currentState, player);
+                return scoreBoard(boardState, player, weights);
             } catch (Exception e) {
                 return 0;
             }
         }
+
         double bestValue;
+
         //otherwise we generate a frontier
-        List<BoardAndMove> futureStates= generateFrontier(currentState, playerNode);
+        List<BoardAndMove> futureStates = generateFrontier(boardState, playerNode);
+
         if (Maximizing==1) {
+
             bestValue = -Double.MAX_VALUE;
+
             for (BoardAndMove state : futureStates) {
                 double attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction, currentPlayer, alpha, beta, new Integer[4]);
                 if (attemptValue > bestValue) {
@@ -418,7 +470,9 @@ public class ChessAI {
             }
         }
         else {
+
             bestValue = Double.MAX_VALUE;
+
             for (BoardAndMove state : futureStates) {
                 double attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction,currentPlayer,alpha, beta,  new Integer[4]);
                 if (attemptValue < bestValue) {
@@ -436,21 +490,41 @@ public class ChessAI {
                 }
             }
         }
+
         return bestValue;
+
     }
 
     private class BoardAndMove{
-        private Board board;
-        private Integer [] move;
-        public BoardAndMove(Board new_board,Integer[] new_move){
-            board= new_board;
-            move= new_move;
+        private BitBoard origBoard;
+        private BitBoard moveBoard;
+        private int p;
+        public BoardAndMove(BitBoard origBoard, BitBoard moveBoard, int player){
+            this.origBoard = origBoard;
+            this.moveBoard = moveBoard;
+            this.p = player - 1;
         }
-        public Board getBoard(){
-            return board;
+        public BitBoard getBoard(){
+            return moveBoard;
         }
         public Integer[] getMove(){
-            return move;
+            long origLoc = (origBoard.allPieces[p]) & ~(moveBoard.allPieces[p]);
+            long newLoc = ~(origBoard.allPieces[p]) & (moveBoard.allPieces[p]);
+
+            int orig_x = -1, orig_y = -1, new_x = -1, new_y = -1;
+
+            for(int i = 0; i < 64; i++) {
+                if((origLoc >> i) == 1L) {
+                    orig_x = 7 - (i % 8);
+                    orig_y = 7 - i / 8;
+                }
+                if((newLoc >> i) == 1L) {
+                    new_x = 7 - (i % 8);
+                    new_y = 7 - i / 8;
+                }
+            }
+
+            return new Integer[] { orig_x, orig_y, new_x, new_y };
         }
     }
 
@@ -475,6 +549,60 @@ public class ChessAI {
         return sum;
     }
 
+    private static int bitCount(int bits) {
+        int uCount = bits - ((bits >> 1) & 033333333333) - ((bits >> 2) & 011111111111);
+        return ((uCount + (uCount >> 3)) & 030707070707) % 63;
+    }
+
+    public static int bitCount(long boardbits)
+    {
+        return bitCount((int)(boardbits >> 32)) +
+                    bitCount((int)(0x0000FFFF & boardbits));
+    }
+
+    public double scoreBoard(BitBoard bitBoard, int player, double[] weights) {
+
+                /* Heavily parallelized code for determining the score of a player */
+        List<Piece> pieces = new ArrayList<Piece>();
+        pieces.addAll(board.getPieces(player));
+        pieces.addAll(board.getPieces(player ^ 3));
+
+        List<Double> scores = new ArrayList<Double>();
+        //        IntStream.range(0, pieces.size()).mapToObj(i -> {
+        for(int i = 0; i < pieces.size(); i++) {
+                    try {
+                        Piece examinedPiece = pieces.get(i);
+                        double score = 0;
+
+                        int x = examinedPiece.getLocX();
+                        int y = examinedPiece.getLocY();
+
+                        if ((bitBoard.allPieces[player-1] >> (x + 8 * y)) == 1L) {
+
+                            score += weights[4 * i] * PieceRank.getRank(examinedPiece);
+
+                            if (weights[4 * i + 1] != 0)
+                                score += weights[4 * i + 1] * bitCount(BitBoards.getMoves(bitBoard, examinedPiece, player, x, y));
+
+                            if (examinedPiece.getClass() == PawnPiece.class && !examinedPiece.isCaptured()) {
+                                //score += weights[4 * i + 2] * PieceRank.pawnIsDoubled((PawnPiece) examinedPiece, board);
+                                //score += weights[4 * i + 3] * PieceRank.pawnIsIsolated((PawnPiece) examinedPiece, board);
+                            }
+
+                        }
+
+                        //return score;
+                        scores.add(score);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //return 0;
+                    }
+                }//).collect(toList());
+
+        return sumd(scores);
+
+    }
 
     /* give the score of the current board for player 'player' */
     //greg

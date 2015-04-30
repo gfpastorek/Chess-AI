@@ -32,7 +32,7 @@ public class Main {
 
         /* parameters */
         int iterations = 100;
-        game.setAIDifficulty(3, 0);
+        game.setAIDifficulty(4, 3);
         int max_turns = 200;
 
         /* evaulation function weights set */

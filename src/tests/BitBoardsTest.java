@@ -14,8 +14,8 @@ public class BitBoardsTest extends TestCase {
 
         BitBoards bitboard = new BitBoards(board);
 
-        assertEquals("all pieces correct", 0b1111111111111111000000000000000000000000000000000000000000000000L, bitboard.getAllPieces(2));
-        assertEquals("all pieces correct", 0b0000000000000000000000000000000000000000000000001111111111111111L, bitboard.getAllPieces(1));
+        assertEquals("all pieces correct", 0b1111111111111111000000000000000000000000000000000000000000000000L, bitboard.getAllPieces(bitboard.realBitBoard, 2));
+        assertEquals("all pieces correct", 0b0000000000000000000000000000000000000000000000001111111111111111L, bitboard.getAllPieces(bitboard.realBitBoard, 1));
     }
 
 }

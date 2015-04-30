@@ -325,6 +325,11 @@ public class Board {
         /* get appropriate king piece and its coordinates */
         int king_x, king_y;
         Piece kingPiece = copyBoard.getPlayerKing(piece.getPlayer());
+
+        if(kingPiece == null) {
+            return true;
+        }
+
         if(copyPiece.getClass() == KingPiece.class){
             king_x = dest_x;
             king_y = dest_y;
@@ -342,6 +347,10 @@ public class Board {
 
         /* capture copyPiece so that further recursions of 'causesCheck' ignore it */
         copyPiece.setCaptured(true);
+
+        if(copyBoard.player1King == null || copyBoard.player2King == null){
+            return true;
+        }
 
         /* check if each opponent piece could attack king */
         for(Piece oppPiece : opponentPieces){
