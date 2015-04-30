@@ -35,7 +35,7 @@ public class BitBoards {
     private Board board;
     
     public BitBoard realBitBoard;
-    
+
     public static class BitBoard {
         public long[] allPieces;
         public long[] allPiecesRotated;
@@ -50,6 +50,7 @@ public class BitBoards {
 
         public HashMap<Piece, Integer[]> locations = new HashMap<Piece, Integer[]>();
 
+        /* clear all bitBoards */
         public void reset() {
             this.knights = new long[2];
             this.allPieces = new long[2];
@@ -63,32 +64,14 @@ public class BitBoards {
             this.kings = new long[2];
         }
 
-        public String represent(int p) {
+        /* visually outout the bitboard of 'bits'*/
+        public static String represent(long bits) {
 
             String output = "\n";
 
             for(int y = 0; y < 8; y++) {
                 for (int x = 0; x < 8; x++) {
-                    if((this.allPieces[p] & getPosBinary(x, y)) != 0L) {
-                        output += "1 ";
-                    } else {
-                        output += "0 ";
-                    }
-                }
-                output += "\n";
-            }
-
-            return output;
-
-        }
-
-        public static String represent(long p) {
-
-            String output = "\n";
-
-            for(int y = 0; y < 8; y++) {
-                for (int x = 0; x < 8; x++) {
-                    if((p & getPosBinary(x, y)) != 0L) {
+                    if((bits & getPosBinary(x, y)) != 0L) {
                         output += "1 ";
                     } else {
                         output += "0 ";
@@ -114,31 +97,15 @@ public class BitBoards {
             this.kings = new long[2];
         }
 
-        public BitBoard(long[] knights, long[] allPieces, long[] allPiecesRotated, long[][]
-                leftDiagonals, long[][] rightDiagonals, long[] pawns, long[] rooks, long[] bishops, long[] queens, long[] kings, ArrayList<Piece> pieces) {
-            this.knights = knights;
-            this.allPieces = allPieces;
-            this.allPiecesRotated = allPiecesRotated;
-            this.leftDiagonals = leftDiagonals;
-            this.rightDiagonals = rightDiagonals;
-            this.pawns = pawns;
-            this.rooks = rooks;
-            this.bishops = bishops;
-            this.queens = queens;
-            this.kings = kings;
 
-            for(Piece piece : pieces) {
-                addPiece(piece);
-            }
-
-        }
-
+        /* add piece at its position */
         public void addPiece(Piece piece) {
             int x = piece.getLocX();
             int y = piece.getLocY();
             locations.put(piece, new Integer[] {x,y});
         }
 
+        /* copy constructor, clones all bitboards */
         public BitBoard(BitBoard other) {
             this.knights = other.knights.clone();
             this.allPieces = other.allPieces.clone();
@@ -161,24 +128,29 @@ public class BitBoards {
         return realBitBoard;
     }
 
-    public enum PieceType {
-        Pawn, Rook, Knight, Bishop, Queen, King
-    }
 
+    /* create a list of bitboards from making each move in 'target' */
     public static List<BitBoard> makeMoves(BitBoard startBoard, long targets, int x, int y, int player, Piece piece) {
 
         int player_index = player - 1;
 
         List<BitBoard> moves = new ArrayList<BitBoard>();
-        
+
+        /* scan the targets for valid locations */
         for(int i = 0; i < 64; i++) {
+
             long target = (1L << i);
+
+            /* check if valid target */
             if((targets & target) != 0) {
+
                 int tx = 7 - (i % 8);
                 int ty = 7 - i / 8;
+
                 int dr = tx + ty;
                 int dl = ty - tx + 7;
-                
+
+                /* make new bitboard, and check all the appropriate bitboards to make the move */
                 BitBoard moveBoard = new BitBoard(startBoard);
 
                 moveBoard.locations.put(piece, new Integer[] {x,y});
@@ -205,18 +177,15 @@ public class BitBoards {
                 else if (piece.getClass() == PawnPiece.class)
                     moveBoard.pawns[player_index] = (startBoard.pawns[player-1] | target) & (~getPosBinary(x, y));
 
-                checkYoSelfBeforeYouReckYoSelf(moveBoard);
-
                 moves.add(moveBoard);
             }
         }
 
-
-
         return moves;
 
     }
-    
+
+    /* copy constructor */
     public BitBoards(Board board) {
 
         this.board = board;
@@ -232,20 +201,24 @@ public class BitBoards {
         
     }
 
+    /* update the realbitboard to match the real board */
     public void updateBoard() {
         updateBoard(realBitBoard);
     }
 
+    /* update the bitboard to match the real board */
     public void updateBoard(BitBoard bitBoard) {
 
         bitBoard.reset();
 
+        /* scan the bitBoard for pieces */
         for(int y = 0; y < board.getMaxY(); y++) {
 
             for(int x = 0; x < board.getMaxX(); x++) {
 
                 Piece piece = board.getPiece(x, y);
 
+                /* add piece to bitBoard */
                 if(piece != null) {
                     updateBitBoards(bitBoard, piece, x, y);
                 }
@@ -254,11 +227,10 @@ public class BitBoards {
 
         }
 
-        checkYoSelfBeforeYouReckYoSelf(bitBoard);
-
     }
 
 
+    /* generate knight move array, all targets are pre-computed for each space */
     private void generateKnightMoves() {
 
         for(int y = 0; y < 8; y++) {
@@ -278,6 +250,7 @@ public class BitBoards {
 
     }
 
+    /* generate king move array, all targets are pre-computed for each space */
     private void generateKingMoves() {
 
         for(int y = 0; y < 8; y++) {
@@ -297,6 +270,7 @@ public class BitBoards {
 
     }
 
+    /* get the bitboard of the position x,y */
     private static long getPosBinary(int x, int y) {
         return 1L << ((7-x) + (7-y)*8);
     }
@@ -317,6 +291,7 @@ public class BitBoards {
 
         bitBoard.addPiece(piece);
 
+        /* update piece specific bitboards */
         if(piece.getClass() == RookPiece.class)
             bitBoard.rooks[player_index] |= posBinary;
         else if (piece.getClass() == KnightPiece.class)
@@ -331,30 +306,13 @@ public class BitBoards {
             bitBoard.pawns[player_index] |= posBinary;
     }
 
+
     public long getAllPieces(BitBoard bitBoard, int player) {
         return bitBoard.allPieces[player-1];
     }
 
 
-    public long findStraightPawnMoves(BitBoard bitBoard, int player) {
-
-        int player_index = player - 1;
-
-        long sgn = (player_index == 0) ? -1 : 1;
-
-        long shiftedPawns = bitBoard.pawns[player_index] << sgn*8;
-        long emptySpaces  = ~(bitBoard.allPieces[0] | allPieces[1]);
-        long validOneSpaceMoves = shiftedPawns & emptySpaces;
-        long unmovedPawns = bitBoard.pawns[player_index] & (255 << ((player_index == 0) ? 48 : 8));
-        long validTwoSpaceMoves = (unmovedPawns << sgn*16) & (unmovedPawns << sgn*8) & emptySpaces;
-        long diagMoves = ((shiftedPawns << 1) & (~LEFT_FILE)) | ((shiftedPawns >> 1) & (~RIGHT_FILE));
-        long validAttacks = diagMoves & bitBoard.allPieces[player_index ^ 1];
-        long validMoves = validOneSpaceMoves | validTwoSpaceMoves | validAttacks;
-
-        return validMoves;
-
-    }
-
+    /* return bitboard of pawn move targets for piece at x,y */
     public static long findPawnMoves(BitBoard bitBoard, int player, int x, int y) {
 
         int player_index = player - 1;
@@ -375,24 +333,7 @@ public class BitBoards {
         return validMoves;
     }
 
-    public long findLeftPawnAttacks(BitBoard bitBoard, int player) {
-        int player_index = player - 1;
-        long sgn = (player_index == 0) ? -1 : 1;
-        long shiftedPawns = bitBoard.pawns[player_index] << sgn*8;
-        long diagMoves = (shiftedPawns << 1) & (~LEFT_FILE);
-        long validAttacks = diagMoves & bitBoard.allPieces[player_index ^ 1];
-        return validAttacks;
-    }
-
-    public long findRightPawnAttacks(BitBoard bitBoard, int player) {
-        int player_index = player - 1;
-        long sgn = (player_index == 0) ? -1 : 1;
-        long shiftedPawns = bitBoard.pawns[player_index] << sgn*8;
-        long diagMoves = (shiftedPawns >> 1) & (~RIGHT_FILE);
-        long validAttacks = diagMoves & bitBoard.allPieces[player_index ^ 1];
-        return validAttacks;
-    }
-
+    /* return bitboard of knight move targets for piece at x,y */
     public static long findKnightMoves(BitBoard bitBoard, int player, int x, int y){
 
         int player_index = player - 1;
@@ -401,6 +342,7 @@ public class BitBoards {
         return validMoves;
     }
 
+    /* return bitboard of king move targets for piece at x,y */
     public static long findKingMoves(BitBoard bitBoard, int player, int x, int y){
 
         int player_index = player - 1;
@@ -409,6 +351,7 @@ public class BitBoards {
         return validMoves;
     }
 
+    /* return bitboard of queen move targets for piece at x,y */
     public static long findQueenMoves(BitBoard bitBoard, int player, int x, int y) {
 
         long diagonalTarget = getDiagonalMoves(bitBoard, player, x, y);
@@ -417,6 +360,7 @@ public class BitBoards {
         return diagonalTarget | straightTargets;
     }
 
+    /* return bitboard of rook move targets for piece at x,y */
     public static long findRookMoves(BitBoard bitBoard, int player, int x, int y) {
 
         long targets = getStraightMoves(bitBoard, player, x, y);
@@ -424,6 +368,7 @@ public class BitBoards {
         return targets;
     }
 
+    /* return bitboard of horizontal+vertical moves for piece at x,y */
     private static long getStraightMoves(BitBoard bitBoard, int player, int x, int y) {
         long horizontalMoves = findHorizontalMoves(bitBoard, player, x, y);
         long verticalMoves = findVerticalMoves(bitBoard, player, x, y);
@@ -437,6 +382,7 @@ public class BitBoards {
         return targets;
     }
 
+    /* return bitboard of bishop move targets for piece at x,y */
     public static long findBishopMoves(BitBoard bitBoard, int player, int x, int y) {
 
         long target = getDiagonalMoves(bitBoard, player, x, y);
@@ -444,21 +390,18 @@ public class BitBoards {
         return target;
     }
 
+    /* return bitboard of diagonal move targets for piece at x,y */
     private static long getDiagonalMoves(BitBoard bitBoard, int player, int x, int y) {
         long leftDiagonalMoves = findLeftDiagonalMoves(bitBoard, player, x, y);
         long rightDiagonalMoves = findRightDiagonalMoves(bitBoard, player, x, y);
 
         long target = 0L;
 
+        /* compute left/right diagonal */
         int dr = x + y;
         int dl = y - x + 7;
 
-
-
-
-        //bitBoard.rightDiagonals[player_index][x+y] |= ((x+y) < 8) ? (1L << x) : (1L << 7 - y);
-        //bitBoard.leftDiagonals[player_index][y-x+7] |= ((y-x+7) < 8) ? (1L << 7-x) : (1L << 7-y);
-
+        /* convert diagonal bitboard to square bitboard */
         for(int i = 0; i < 8; i++) {
             if(((leftDiagonalMoves >> i) & 1L) == 1L) {
                 int xl = (dl < 8) ? 7-i : 14-i-dl;
@@ -474,6 +417,7 @@ public class BitBoards {
         return target;
     }
 
+    /* return bitboard of horizontal move targets for piece at x,y */
     public static long findHorizontalMoves(BitBoard bitBoard, int player, int x, int y) {
 
         /* horizontal slides */
@@ -484,16 +428,18 @@ public class BitBoards {
         return validMoves;
     }
 
+    /* return bitboard of vertical move targets for piece at x,y */
     public static long findVerticalMoves(BitBoard bitBoard, int player, int x, int y) {
 
         /* vertical slides */
-        long occupancy = computeFileOccupancy(bitBoard, 7-x);
+        long occupancy = computeFileOccupancy(bitBoard, 7 - x);
         long potentialTargets = horizontalAttackBoards[y][(int)occupancy];
         long validMoves = ((~bitBoard.allPiecesRotated[player-1]) >> 8*(7-x)) & potentialTargets;
 
         return validMoves;
     }
 
+    /* return bitboard of right diagonal move targets for piece at x,y */
     public static long findRightDiagonalMoves(BitBoard bitBoard, int player, int x, int y) {
 
         int d_pos = (x+y < 8) ? x : 7 - y;
@@ -505,6 +451,7 @@ public class BitBoards {
         return validMoves;
     }
 
+    /* return bitboard of left diagonal move targets for piece at x,y */
     public static long findLeftDiagonalMoves(BitBoard bitBoard, int player, int x, int y) {
 
         int d_pos = (y-x+7 < 8) ? 7 - x : 7 - y;
@@ -516,10 +463,12 @@ public class BitBoards {
         return validMoves;
     }
 
+    /* compute the row bitboard for rank */
     private static long computeRankOccupancy(BitBoard bitBoard, int rank) {
         return ((bitBoard.allPieces[0] | bitBoard.allPieces[1]) >> (rank*8)) & 255;
     }
 
+    /* compute the column bitboard for file */
     private static long computeFileOccupancy(BitBoard bitBoard, int file) {
         return ((bitBoard.allPiecesRotated[0] | bitBoard.allPiecesRotated[1]) >> (file*8)) & 255;
     }
@@ -554,6 +503,7 @@ public class BitBoards {
 
     }
 
+    /* precompute diagonal attack board targets */
     private void generateDiagonalAttackBoards() {
 
         for(int dd = 0; dd < 15; dd++) {
@@ -581,7 +531,6 @@ public class BitBoards {
                     }
 
                     diagonalAttackBoards[d][i][j] = targetBinary;
-                    //diagonalAttackBoards[14-d][i][j] = targetBinary;
                 }
 
             }
@@ -591,9 +540,8 @@ public class BitBoards {
     }
 
 
+    /* get all moves for piece at x,y as a target bitboard */
     public static long getMoves(BitBoard bitBoard, Piece piece, int player, int x, int y) {
-
-        int player_index = player - 1;
 
         if(piece.getClass() == RookPiece.class) {
             return findRookMoves(bitBoard, player, x, y) & (~getPosBinary(x, y));
@@ -610,24 +558,6 @@ public class BitBoards {
         }
 
         return 0L;
-
-    }
-
-
-
-    public static boolean checkYoSelfBeforeYouReckYoSelf(BitBoard bitBoard) {
-
-        for(int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                boolean b1 = (((bitBoard.allPieces[0] | bitBoard.allPieces[1]) & getPosBinary(x, y)) != 0L);
-                boolean b2 = (((bitBoard.allPiecesRotated[0] | bitBoard.allPiecesRotated[1]) & getPosBinary(y, x)) != 0L);
-                if(b1 != b2) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
 
     }
 

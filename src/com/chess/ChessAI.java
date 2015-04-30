@@ -214,54 +214,36 @@ public class ChessAI {
 
     }
 
-    //yuriy
-    /*
-    private List<BoardAndMove> generateFrontier(Board startState, int currentPlayer) throws Exception {
-        List<BoardAndMove> frontier= new ArrayList<BoardAndMove>();
-        List<Piece> pieces_= startState.getPieces(currentPlayer);
-        for (Piece piece : pieces_) {
-            List<Integer[]> possibleMoves= new ArrayList<Integer[]>();
-
-            possibleMoves = piece.validDestinationSet(false);
-
-            for(Integer[] possibleMove: possibleMoves){
-                Board possibleState = startState;
-                possibleState = new Board(startState);
-                possibleState.movePiece(possibleMove[0], possibleMove[1], possibleMove[2], possibleMove[3]);
-                frontier.add(new BoardAndMove(possibleState,possibleMove));
-            }
-        }
-        return frontier;
-    }*/
 
 
+    //greg
+    /* create all frontiers, that is, all possible baord and moves from the current state */
     private List<BoardAndMove> generateFrontier(BitBoard startState, int currentPlayer) throws Exception {
 
         List<BoardAndMove> frontier = new ArrayList<BoardAndMove>();
 
         List<Piece> pieces = board.getPieces(currentPlayer);
 
-        BitBoards bitBoards = board.getBitboards();
-
+        /* for each piece, make all possible moves */
         for (Piece piece : pieces) {
 
             Integer[] loc = startState.locations.get(piece);
 
             long targets = BitBoards.getMoves(startState, piece, currentPlayer, loc[0], loc[1]);
 
+            /* targets is a bitboard of target moves, 0L means no moves */
             if(targets != 0L) {
                 List<BitBoard> moveBoards = BitBoards.makeMoves(startState, targets, loc[0], loc[1], currentPlayer, piece);
 
                 for(BitBoard moveBoard: moveBoards){
-                    if((new BoardAndMove(startState, moveBoard, currentPlayer)).getMove()[3] == -1 ||
-                        (new BoardAndMove(startState, moveBoard, currentPlayer)).getMove()[0] == -1){
-                        if(YAH)
-                            continue;
-                        System.out.println("A");
-                        BitBoards.getMoves(startState, piece, currentPlayer, loc[0], loc[1]);
-                        (new BoardAndMove(startState, moveBoard, currentPlayer)).getMove();
+                    BoardAndMove newState = new BoardAndMove(startState, moveBoard, currentPlayer);
+
+                    /* skip erroneous moves */
+                    if(newState.getMove()[3] == -1 || newState.getMove()[0] == -1){
+                        continue;
                     }
-                    frontier.add(new BoardAndMove(startState, moveBoard, currentPlayer));
+
+                    frontier.add(newState);
                 }
             }
 
