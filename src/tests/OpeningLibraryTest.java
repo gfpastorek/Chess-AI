@@ -61,6 +61,7 @@ public class OpeningLibraryTest {
         int src_y = move[1];
         int dst_x = move[2];
         int dst_y = move[3];
+        int k;
 
         boolean correctPosition = ((dst_x == 4 || dst_x==3) && dst_y == 3);
 
