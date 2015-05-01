@@ -205,6 +205,7 @@ public class Game {
                 options[1]);
         return n == 0;
     }
+
     /* pop up prompt asking if user would like to play classic chess or Chuck Norris Chess */
     /* returns true if they select classic chess                                           */
     private boolean promptGameMode(){
@@ -317,9 +318,12 @@ public class Game {
         if(!openingSequence) {
             move = ai.getMove();
         }
+        if(move == null || move[0] == null || 0 != board.movePiece(move[0], move[1], move[2], move[3])) {
+            move = ai.getMove(2);
+            board.movePiece(move[0], move[1], move[2], move[3]);
+        }
         previousMove= move;
         previousBoard = new Board(board);
-        board.movePiece(move[0], move[1], move[2], move[3]);
         player_turn ^= 3;  //change player turn, bitwise XOR alternates between 1 and 2
 
         // TODO add this function

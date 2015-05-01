@@ -390,7 +390,7 @@ public class ChessAI {
         if (depth == 0 || currentState.checkEndState()) {
             //if we are at a leaf, we return the heuristic value
             try {
-                return scoreBoard(currentState, player);
+                return scoreBoard(currentState, player, weights);
             } catch (Exception e) {
                 return 0;
             }
@@ -418,7 +418,7 @@ public class ChessAI {
             }
         }
         else {
-            bestValue = Double.MAX_VALUE;
+            bestValue = Integer.MAX_VALUE;
             for (BoardAndMove state : futureStates) {
                 double attemptValue = MiniMax(state.getBoard(), depth - 1, nextAction,currentPlayer,alpha, beta,  new Integer[4]);
                 if (attemptValue < bestValue) {
@@ -564,7 +564,6 @@ public class ChessAI {
         return openingMove;
     }
     private Integer[] openingMoveConverter(Piece curPiece, MoveNode curMove){
-        // converts a movenode and current piece into a location
         Integer[] openingMove= new Integer[4];
         openingMove[0]=curPiece.getLocX();
         openingMove[1]=curPiece.getLocY();
