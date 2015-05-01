@@ -431,7 +431,7 @@ public class Game {
         }
 
     }
-    public void buildOpeningLibrary() throws Exception{
+    public  void buildOpeningLibrary() throws Exception{
         OpeningLibraryParser openingMoves= OpeningLibraryParser.getInstance();
         openingMoves.setDirectory(libraryDirectory);
         if(openingMoves.updateLibrary("http://www.chess.com/openings/")){
@@ -444,11 +444,9 @@ public class Game {
     public void setOpeningLibrary(OpeningGraph library){
         openingLibrary= library;
     }
-    public OpeningGraph getOpeningLibrary(){
-        return openingLibrary;
-    }
     public void getAIHelp() throws Exception{
         ChessAI helperAI;
+        // gets the AI helper function
         if (player_turn==1) {
             helperAI = new ChessAI(2, board, board.player1Pieces, openingLibrary);
         }
@@ -457,18 +455,15 @@ public class Game {
         }
         Integer move[]=null;
         if (openingSequence){
-            move=helperAI.getMoveFromOpening(previousMove);
-            if (move==null){
+                move=helperAI.getMoveFromOpening(previousMove);
+                if (move==null){
                 openingSequence=false;
             }
         }
         if(!openingSequence) {
             move = helperAI.getMove();
         }
-        /*move[0]=convertUnits(move[0], true);
-        move[1]=convertUnits(move[1], true);
-        move[2]=convertUnits(move[2], true);
-        move[3]=convertUnits(move[3], true);*/
+        //highlights a move square
         gui.highlightHelperSquare(move);
     }
 }

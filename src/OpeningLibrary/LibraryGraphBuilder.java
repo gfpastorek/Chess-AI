@@ -12,6 +12,8 @@ import java.io.File;
  * Created by Yuriy on 4/22/2015.
  */
 public class LibraryGraphBuilder {
+    //singleton pattern for a opening library builder class for XML documents
+    // Builds a forest data structure from the XML document for the chess game to use
     private static LibraryGraphBuilder instance = null;
     static File libraryDirectory= null;
     protected LibraryGraphBuilder() {
@@ -24,6 +26,7 @@ public class LibraryGraphBuilder {
         return instance;
     }
     public OpeningGraph buildGraphFromXML() throws Exception{
+        //opens the local XML doc
         File libraryXML = new File(libraryDirectory,"openingLibrary.xml");
         if (libraryXML==null){
             return null;

@@ -10,22 +10,31 @@ import java.util.Random;
  * Created by Yuriy on 4/23/2015.
  */
 public class MoveNode{
+    //move node in the opening moves graph
+    // unique identifier
     private String identifier;
+    // end position
     private int dest_x;
     private int dest_y;
+    // piece type
     private Class piece;
+    // piece location hint in case of ambiguity
     private int pieceLocHint;
+    // all possible following moves
     ArrayList<MoveNode> nextMoves;
     public MoveNode(Node curNode){
         nextMoves=new ArrayList<MoveNode>();
+        //converts XML node to MoveNode
         convertToMoveNode(curNode);
     }
     public void addNextMove(MoveNode next){
         nextMoves.add(next);
     }
     public void convertToMoveNode(Node curNode){
+        //sets the identifier
         identifier= curNode.getAttributes().item(0).getNodeValue();
         int moveLength= identifier.length();
+        //different ways to parse the algebraic notation based on its length
         if (moveLength<2){
             return;
         }
@@ -59,27 +68,23 @@ public class MoveNode{
         }
     }
     public void setCoordinates(String pos){
+        // sets the coordinate from alphanumeric notation
         dest_x= 7-(pos.charAt(0)-'a');
         dest_y= Character.getNumericValue(pos.charAt(1))-1;
     }
     public void setHintLoc(char loc){
-        pieceLocHint= loc-'a';
-    }
-    public boolean isNextMove(MoveNode nextNode){
-        for (MoveNode nextMove:nextMoves){
-            if (nextMove.identifier==nextNode.identifier){
-                return true;
-            }
-        }
-        return false;
+        // sets the location hint
+        pieceLocHint= 7-(loc-'a');
     }
     public Integer[] getNextMove(){
+        // gets the next move for this node as an integer
         Integer [] nextMove= new Integer[2];
         nextMove[0]=dest_x;
         nextMove[1]=dest_y;
         return nextMove;
     }
     public MoveNode getRandomNextMoveNode(){
+        // gets a random move that can follow this movenode
         MoveNode randomOpeningMove=null;
 
         Random randomGenerator = new Random();
@@ -128,6 +133,7 @@ public class MoveNode{
         return identifier;
     }
     public MoveNode findNextMove(Integer[] location){
+        // checks if a location follows this movenode
         MoveNode findMove=null;
         for(MoveNode nextMove:nextMoves){
             if((nextMove.getX()==location[2])&&(nextMove.getY()==location[3])){
